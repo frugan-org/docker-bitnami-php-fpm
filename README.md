@@ -2,7 +2,7 @@
 
 # Docker Bitnami PHP-FPM
 
-Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/bitnami-docker-php-fpm) with optional support of:
+Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/bitnami-docker-php-fpm) with optional integration of:
 
 - [Sendmail](https://en.wikipedia.org/wiki/Sendmail)
 - [MailHog](https://hub.docker.com/r/mailhog/mailhog/)
