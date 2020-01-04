@@ -1,3 +1,11 @@
+## [Unreleased](https://github.com/frugan-it/docker-bitnami-php-fpm/compare/v1.0.0...HEAD)
+
+### Commits
+
+- Updated CHANGELOG [`68263f7`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/68263f75fbd7e966aa15b8409d10ecace08e40ff)
+- Updated .env file [`c56b7a1`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/c56b7a1b040ef87694eac31d3eec52f6d0b18687)
+- Updated README [`06d0b6d`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/06d0b6d51c3e8a6d05fbc8f62587b8fb8436bc33)
+
 ## v1.0.0 - 2020-01-04
 
 ### Commits

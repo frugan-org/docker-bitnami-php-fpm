@@ -29,7 +29,7 @@ RUN set -ex; \
 	    } >> /opt/bitnami/php/etc/php.ini; \
 	fi; \
 	\
-	# W3TC
+    # W3TC
     echo 'extension=memcached.so' | tee -a /opt/bitnami/php/etc/php.ini; \
     \
     # apcu
