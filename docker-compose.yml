@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+
+  php:
+    container_name: ${PHP_NAME}
+    build:
+      context: .
+      args:
+        ENV: ${ENV}
+        PHP_TAG: ${PHP_TAG}
+        MAILHOG_VERSION: ${MAILHOG_VERSION}
+        PHP_COMPOSER_PATH: ${PHP_COMPOSER_PATH}
+        PHP_WP_CLI_ENABLED: ${PHP_WP_CLI_ENABLED}
+        NEWRELIC_VERSION: ${NEWRELIC_VERSION}
+        NEWRELIC_LICENSE_KEY: ${NEWRELIC_LICENSE_KEY}
+        NEWRELIC_APPLICATION_NAME: ${NEWRELIC_APPLICATION_NAME}
+    restart: always
+    networks:
+      - default
+    ports:
+      - ${PHP_PORT}:9000
+    environment:
+      ENV: ${ENV}
+      COMPOSER_ALLOW_SUPERUSER: 1
+      PHP_COMPOSER_PATH: ${PHP_COMPOSER_PATH}
+      PHP_WP_CLI_ENABLED: ${PHP_WP_CLI_ENABLED}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+
+  mailhog:
+    container_name: ${MAILHOG_NAME}
+    image: mailhog/mailhog:${MAILHOG_TAG}
+    ports:
+      - ${MAILHOG_SMTP_PORT}:1025
+      - ${MAILHOG_HTTP_PORT}:8025
+    networks:
+      - default

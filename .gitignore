@@ -1,0 +1,54 @@
+#https://www.gitignore.io
+#https://git-scm.com/docs/gitignore
+#https://stackoverflow.com/a/5534865
+#https://coderwall.com/p/quessg/exclude-files-subfolder-in-gitignore
+
+# Example to exclude everything except a specific directory foo/bar (note the /* - without the slash, the wildcard would also exclude everything within foo/bar):
+#
+#/*
+#!/foo
+#/foo/*
+#!/foo/bar
+
+#/home/* Matches every file/directory directly in the /home directory.
+#/home/** Matches every file/directory in any directory inside /home.
+
+*
+
+!.gitignore
+!.dockerignore
+
+.env
+.env.*
+!.env.dist
+
+!.auto-changelog
+!auto-changelog.hbs
+!CHANGELOG.md
+!README.md
+!LICENSE
+
+!docker-compose.yml
+!docker-compose*.yml.dist
+!Dockerfile
+!app-entrypoint.sh
+
+# Created by https://www.gitignore.io/api/git
+# Edit at https://www.gitignore.io/?templates=git
+
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+# End of https://www.gitignore.io/api/git
