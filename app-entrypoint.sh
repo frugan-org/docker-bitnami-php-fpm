@@ -1,4 +1,5 @@
 #!/bin/sh
+
 set -e
 
 if [ ! -z "${PHP_COMPOSER_PATH}" ]; then

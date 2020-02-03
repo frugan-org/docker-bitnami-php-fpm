@@ -15,11 +15,11 @@ services:
         NEWRELIC_VERSION: ${NEWRELIC_VERSION}
         NEWRELIC_LICENSE_KEY: ${NEWRELIC_LICENSE_KEY}
         NEWRELIC_APPLICATION_NAME: ${NEWRELIC_APPLICATION_NAME}
-    restart: always
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - default
-    ports:
-      - ${PHP_PORT}:9000
     environment:
       ENV: ${ENV}
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -29,7 +29,10 @@ services:
 
   mailhog:
     container_name: ${MAILHOG_NAME}
-    image: mailhog/mailhog:${MAILHOG_TAG}
+    image: mailhog/mailhog:${MAILHOG_TAG:-latest}
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - ${MAILHOG_SMTP_PORT}:1025
       - ${MAILHOG_HTTP_PORT}:8025
