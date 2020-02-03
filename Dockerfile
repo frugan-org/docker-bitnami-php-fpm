@@ -12,6 +12,27 @@ RUN install_packages \
 
 ARG ENV
 
+#https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
+ARG USER_ID
+ARG GROUP_ID
+
+RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
+        userdel -f daemon; \
+        if getent group daemon; then \
+            groupdel daemon; \
+        fi; \
+        groupadd -g ${GROUP_ID} daemon; \
+        useradd -l -u ${USER_ID} -g daemon daemon; \
+        install -d -m 0755 -o daemon -g daemon /home/daemon; \
+        #chown --changes --silent --no-dereference --recursive --from=33:33 ${USER_ID}:${GROUP_ID} \
+        #    /home/daemon \
+        #    /.composer \
+        #    /var/run/php-fpm \
+        #    /var/lib/php/sessions \
+        #; \
+    fi
+
+
 #https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
 #https://stackoverflow.com/a/58067682
 #https://stackoverflow.com/a/30822781
@@ -29,7 +50,7 @@ RUN set -ex; \
 	    } >> /opt/bitnami/php/etc/php.ini; \
 	fi; \
 	\
-    # W3TC
+	# W3TC
     echo 'extension=memcached.so' | tee -a /opt/bitnami/php/etc/php.ini; \
     \
     # apcu
@@ -97,7 +118,7 @@ RUN if [ ! -z "${PHP_WP_CLI_ENABLED}" ]; then \
         set -ex; \
         curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; \
         chmod +x /usr/local/bin/wp; \
-    fi
+	fi
 
 
 #### newrelic
