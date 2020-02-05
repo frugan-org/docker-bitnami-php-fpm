@@ -1,8 +1,15 @@
-## [Unreleased](https://github.com/frugan-it/docker-bitnami-php-fpm/compare/v1.0.0...HEAD)
+## [Unreleased](https://github.com/frugan-it/docker-bitnami-php-fpm/compare/v1.1.0...HEAD)
 
 ### Commits
 
-- Updated Dockerfile and docker-compose file [`2a9ce1e`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/2a9ce1ef7e09ce2e9dc4602593b993c10c340dc1)
+- Updated ARG and ENV variables [`829c36e`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/829c36e9a8e046afe1157bfb2f9ef4980fbe4d17)
+- Merge tag 'v1.1.0' into develop [`1f2bde7`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/1f2bde713d959f8699c33d40d98ceb4d9eb3fc58)
+
+## [v1.1.0](https://github.com/frugan-it/docker-bitnami-php-fpm/compare/v1.0.0...v1.1.0) - 2020-02-03
+
+### Commits
+
+- Updated Dockerfile and docker-compose file [`62edaf0`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/62edaf0a10a445ceccd3202f020f3ce3d970ae75)
 - Updated .env file [`ff94685`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/ff946855a560fd7839d4a93ff412e22cb3facf61)
 - Updated CHANGELOG [`68263f7`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/68263f75fbd7e966aa15b8409d10ecace08e40ff)
 - Updated README [`06d0b6d`](https://github.com/frugan-it/docker-bitnami-php-fpm/commit/06d0b6d51c3e8a6d05fbc8f62587b8fb8436bc33)
