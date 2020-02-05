@@ -1,8 +1,12 @@
 #https://docs.bitnami.com/bch/apps/wordpress/configuration/install-modules-php/
 
 ARG PHP_TAG
+ARG ENV
 
-FROM bitnami/php-fpm:${PHP_TAG:-latest}
+ENV PHP_TAG=${PHP_TAG:-latest}
+    ENV=${ENV:-develop}
+
+FROM bitnami/php-fpm:${PHP_TAG}
 
 RUN install_packages \
         rsync \
@@ -10,13 +14,14 @@ RUN install_packages \
     ;
 
 
-ARG ENV
-
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
 ARG USER_ID
 ARG GROUP_ID
 
-RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
+ENV USER_ID=${USER_ID:-0}
+    GROUP_ID=${GROUP_ID:-0}
+
+RUN if [ ${USER_ID} -ne 0 ] && [ ${GROUP_ID} -ne 0 ]; then \
         userdel -f daemon; \
         if getent group daemon; then \
             groupdel daemon; \
@@ -73,6 +78,8 @@ RUN if [ "${ENV}" != "develop" ]; then \
 
 ARG MAILHOG_VERSION
 
+ENV MAILHOG_VERSION=${MAILHOG_VERSION}
+
 RUN if [ "${ENV}" = "develop" ]; then \
         set -eux; \
         install_packages \
@@ -89,6 +96,8 @@ RUN if [ "${ENV}" = "develop" ]; then \
 #### composer
 
 ARG PHP_COMPOSER_PATH
+
+ENV PHP_COMPOSER_PATH=${PHP_COMPOSER_PATH}
 
 RUN if [ ! -z "${PHP_COMPOSER_PATH}" ]; then \
         set -ex; \
@@ -114,6 +123,8 @@ RUN if [ ! -z "${PHP_COMPOSER_PATH}" ]; then \
 
 ARG PHP_WP_CLI_ENABLED
 
+ENV PHP_WP_CLI_ENABLED=${PHP_WP_CLI_ENABLED}
+
 RUN if [ ! -z "${PHP_WP_CLI_ENABLED}" ]; then \
         set -ex; \
         curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar; \
@@ -127,6 +138,10 @@ RUN if [ ! -z "${PHP_WP_CLI_ENABLED}" ]; then \
 ARG NEWRELIC_VERSION
 ARG NEWRELIC_LICENSE_KEY
 ARG NEWRELIC_APPLICATION_NAME
+
+ENV NEWRELIC_VERSION=${NEWRELIC_VERSION}
+    NEWRELIC_LICENSE_KEY=${NEWRELIC_LICENSE_KEY}
+    NEWRELIC_APPLICATION_NAME=${NEWRELIC_APPLICATION_NAME}
 
 #https://stackoverflow.com/a/584926/3929620
 RUN if [ ! -z "${NEWRELIC_LICENSE_KEY}" ]; then \
