@@ -1,5 +1,6 @@
 #https://docs.bitnami.com/bch/apps/wordpress/configuration/install-modules-php/
 #https://blog.armesto.net/i-didnt-know-you-could-do-that-with-a-dockerfile/
+#https://medium.com/better-programming/build-your-docker-images-automatically-when-you-push-on-github-18e80ece76af
 
 ARG PHP_TAG
 
