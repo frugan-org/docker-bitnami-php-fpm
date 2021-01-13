@@ -1,2 +1,61 @@
 FROM bitnami/php-fpm:7.3.13
 
+ARG ENV=develop
+ENV ENV=$ENV
+
+RUN install_packages \
+        patch \
+        rsync \
+        vim \
+    ;
+
+#https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
+ENV USER_ID=0
+ENV GROUP_ID=0
+
+RUN if [ ${USER_ID} -ne 0 ] && [ ${GROUP_ID} -ne 0 ]; then \
+        userdel -f daemon; \
+        if getent group daemon; then \
+            groupdel daemon; \
+        fi; \
+        groupadd -g ${GROUP_ID} daemon; \
+        useradd -l -u ${USER_ID} -g daemon daemon; \
+        install -d -m 0755 -o daemon -g daemon /home/daemon; \
+        #chown --changes --silent --no-dereference --recursive --from=33:33 ${USER_ID}:${GROUP_ID} \
+        #    /home/daemon \
+        #    /.composer \
+        #    /var/run/php-fpm \
+        #    /var/lib/php/sessions \
+        #; \
+    fi
+
+#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
+#https://stackoverflow.com/a/58067682
+#https://stackoverflow.com/a/30822781
+#https://wordpress.stackexchange.com/a/286098/99214
+RUN set -ex; \
+    { \
+        echo ''; \
+        echo 'env[ENV] = $ENV'; \
+    } >> /opt/bitnami/php/etc/environment.conf; \
+    \
+    if [ "${ENV}" = "develop" ]; then \
+	    { \
+	        echo 'user_ini.filename = ".user-'"${ENV}"'.ini"'; \
+	        echo 'user_ini.cache_ttl = 0'; \
+	    } >> /opt/bitnami/php/etc/php.ini; \
+	fi; \
+	\
+	#https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
+    { \
+        echo 'extension=apcu.so'; \
+        #echo 'extension=imap.so'; \
+        #echo 'extension=maxminddb.so'; \
+        # W3TC
+        echo 'extension=memcached.so'; \
+        #echo 'extension=newrelic.so'; \
+        #echo 'extension=opcache.so'; \
+        #echo 'extension=pdo_dblib.so'; \
+        #echo 'extension=pdo_pgsql.so'; \
+        #echo 'extension=pgsql.so'; \
+    } | tee -a /opt/bitnami/php/etc/php.ini;
