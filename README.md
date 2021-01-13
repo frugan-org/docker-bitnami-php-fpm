@@ -20,6 +20,7 @@ See auto-[CHANGELOG](CHANGELOG.md) file.
 
 ### Usefull links
 
+- https://blog.bitsrc.io/how-to-pass-environment-info-during-docker-builds-1f7c5566dd0e
 - https://medium.com/better-programming/build-your-docker-images-automatically-when-you-push-on-github-18e80ece76af
 - https://medium.com/@_oleksii_/set-up-automated-builds-using-github-and-docker-hub-12c3e0f18eba
 - https://dev.to/samuelea/automate-your-builds-on-docker-hub-by-writing-a-build-hook-script-13fp

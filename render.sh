@@ -10,7 +10,10 @@ render() {
   sed -r "$sedStr" $1
 }
 
-TAGS=(7.3.13)
+TAGS=(
+  7.3.13
+  7.3.13-prod
+)
 ENTRYPOINT=app-entrypoint.sh
 
 for TAG in ${TAGS[*]}; do

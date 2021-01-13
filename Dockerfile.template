@@ -1,61 +1,79 @@
 FROM bitnami/php-fpm:%%TAG%%
 
-ARG ENV=develop
-ENV ENV=$ENV
-
 RUN install_packages \
         patch \
         rsync \
         vim \
     ;
 
-#https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
-ENV USER_ID=0
-ENV GROUP_ID=0
 
-RUN if [ ${USER_ID} -ne 0 ] && [ ${GROUP_ID} -ne 0 ]; then \
-        userdel -f daemon; \
-        if getent group daemon; then \
-            groupdel daemon; \
-        fi; \
-        groupadd -g ${GROUP_ID} daemon; \
-        useradd -l -u ${USER_ID} -g daemon daemon; \
-        install -d -m 0755 -o daemon -g daemon /home/daemon; \
-        #chown --changes --silent --no-dereference --recursive --from=33:33 ${USER_ID}:${GROUP_ID} \
-        #    /home/daemon \
-        #    /.composer \
-        #    /var/run/php-fpm \
-        #    /var/lib/php/sessions \
-        #; \
-    fi
+#### ImageMagick
 
-#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
-#https://stackoverflow.com/a/58067682
-#https://stackoverflow.com/a/30822781
-#https://wordpress.stackexchange.com/a/286098/99214
-RUN set -ex; \
-    { \
-        echo ''; \
-        echo 'env[ENV] = $ENV'; \
-    } >> /opt/bitnami/php/etc/environment.conf; \
+#https://github.com/bitnami/bitnami-docker-php-fpm/issues/121
+#https://community.bitnami.com/t/imagemagick-is-not-installed/70980/3
+RUN install_packages \
+        # Runtime requirements for ImageMagick PHP extension.
+        fontconfig-config \
+        fonts-dejavu-core \
+        imagemagick-6-common \
+        libfftw3-double3 \
+        libfontconfig1 \
+        libglib2.0-0 \
+        libgomp1 \
+        libjbig0 \
+        liblcms2-2 \
+        liblqr-1-0 \
+        libltdl7 \
+        libmagickcore-6.q16-6 \
+        libmagickwand-6.q16-6 \
+        libopenjp2-7 \
+        libtiff5 \
+        libx11-6 \
+        libx11-data \
+        libxau6 \
+        libxcb1 \
+        libxdmcp6 \
+        libxext6 \
+        unzip \
+        \
+        # Compile-time requirements for ImageMagick PHP extension.
+        autoconf \
+        gcc \
+        libc-dev \
+        libmagickwand-dev \
+        make \
+        pkg-config \
+    ; \
     \
-    if [ "${ENV}" = "develop" ]; then \
-	    { \
-	        echo 'user_ini.filename = ".user-'"${ENV}"'.ini"'; \
-	        echo 'user_ini.cache_ttl = 0'; \
-	    } >> /opt/bitnami/php/etc/php.ini; \
-	fi; \
-	\
-	#https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
-    { \
-        echo 'extension=apcu.so'; \
-        #echo 'extension=imap.so'; \
-        #echo 'extension=maxminddb.so'; \
-        # W3TC
-        echo 'extension=memcached.so'; \
-        #echo 'extension=newrelic.so'; \
-        #echo 'extension=opcache.so'; \
-        #echo 'extension=pdo_dblib.so'; \
-        #echo 'extension=pdo_pgsql.so'; \
-        #echo 'extension=pgsql.so'; \
-    } | tee -a /opt/bitnami/php/etc/php.ini;
+    # Install imagick php extension and enable it
+    # At one point in the installer, a default value should be used, which
+    # requires the user to press enter the echo simulates this interaction
+    pecl channel-update pecl.php.net; \
+    pecl install imagick; \
+    \
+    echo "extension=imagick.so" > /opt/bitnami/php/etc/conf.d/imagemagick.ini; \
+    \
+    echo "[www]\nenv[MAGICK_CODER_MODULE_PATH]='/usr/lib/x86_64-linux-gnu/ImageMagick-6.9.10/modules-Q16/coders'" > /opt/bitnami/php/etc/php-fpm.d/imagemagick.conf; \
+    \
+    # remove stuff which is only required for installation of ImageMagick
+    apt-get -y remove --auto-remove \
+        autoconf \
+        gcc \
+        libc-dev \
+        libmagickwand-dev \
+        make \
+        pkg-config \
+    ; \
+    rm -rf /usr/include/*; \
+    rm -rf /tmp/*;
+
+
+####
+
+COPY app-entrypoint.sh /
+
+#https://github.com/docker-library/postgres/issues/296#issuecomment-308735942
+RUN chmod +x /app-entrypoint.sh
+
+ENTRYPOINT [ "/app-entrypoint.sh" ]
+CMD [ "php-fpm", "-F", "--pid", "/opt/bitnami/php/tmp/php-fpm.pid", "-y", "/opt/bitnami/php/etc/php-fpm.conf" ]
