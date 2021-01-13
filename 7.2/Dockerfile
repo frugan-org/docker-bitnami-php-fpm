@@ -1,4 +1,4 @@
-FROM bitnami/php-fpm:7.3.13
+FROM bitnami/php-fpm:7.2
 
 RUN install_packages \
         patch \

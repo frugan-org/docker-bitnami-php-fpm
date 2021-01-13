@@ -11,8 +11,12 @@ deploy() {
 }
 
 TAGS=(
-  7.3.13
-  7.3.13-prod
+  7.2
+  7.2-prod
+  7.3
+  7.3-prod
+  7.4
+  7.4-prod
 )
 
 ENTRYPOINT=app-entrypoint.sh
