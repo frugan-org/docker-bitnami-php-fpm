@@ -18,6 +18,17 @@ For your contributions please use the [git-flow workflow](https://danielkummer.g
 
 See auto-[CHANGELOG](CHANGELOG.md) file.
 
+### Usefull links
+
+- https://blog.dockbit.com/templating-your-dockerfile-like-a-boss-2a84a67d28e9
+- https://docs.bitnami.com/bch/apps/wordpress/configuration/install-modules-php/
+- https://blog.armesto.net/i-didnt-know-you-could-do-that-with-a-dockerfile/
+- https://medium.com/better-programming/build-your-docker-images-automatically-when-you-push-on-github-18e80ece76af
+- https://www.gitignore.io
+- https://git-scm.com/docs/gitignore
+- https://stackoverflow.com/a/5534865
+- https://coderwall.com/p/quessg/exclude-files-subfolder-in-gitignore
+
 ### Credits
 
 © Copyright 2020 [Frugan](https://frugan.it) All rights reserved.  

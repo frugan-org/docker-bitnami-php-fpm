@@ -1,3 +1,4 @@
+#https://blog.dockbit.com/templating-your-dockerfile-like-a-boss-2a84a67d28e9
 #https://docs.bitnami.com/bch/apps/wordpress/configuration/install-modules-php/
 #https://blog.armesto.net/i-didnt-know-you-could-do-that-with-a-dockerfile/
 #https://medium.com/better-programming/build-your-docker-images-automatically-when-you-push-on-github-18e80ece76af
