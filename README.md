@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # Docker Bitnami PHP-FPM
 
@@ -10,13 +10,27 @@ Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/b
 - [WP-CLI](https://wp-cli.org)
 - [New Relic](https://newrelic.com)
 
+### Changelog
+
+See auto-[CHANGELOG](CHANGELOG.md) file.
+
 ### Contributing
 
 For your contributions please use the [git-flow workflow](https://danielkummer.github.io/git-flow-cheatsheet/).
 
-### Changelog
+### Support
 
-See auto-[CHANGELOG](CHANGELOG.md) file.
+<!-- 
+https://www.buymeacoffee.com/brand 
+https://stackoverflow.com/a/26138535/3929620
+https://github.com/nrobinson2000/donate-bitcoin
+https://bitcoin.stackexchange.com/a/48744
+https://github.com/KristinitaTest/KristinitaTest.github.io/blob/master/donate/Bitcoin-Protocol-Markdown.md
+-->
+[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="200" alt="Buy Me A Coffee">](https://buymeacoff.ee/frugan)
+
+![Donate Me A Bitcoin](https://i.stack.imgur.com/MnQ6V.png)  
+My BTC address `17juoYguPJ6rgGwtkBUaQZeNKMk3mEKkn5`.
 
 ### Usefull links
 
@@ -33,7 +47,7 @@ See auto-[CHANGELOG](CHANGELOG.md) file.
 - https://stackoverflow.com/a/5534865
 - https://coderwall.com/p/quessg/exclude-files-subfolder-in-gitignore
 
-### Credits
+### License
 
-© Copyright 2020 [Frugan](https://frugan.it) All rights reserved.  
-License MIT, see [LICENSE](LICENSE) file.
+(ɔ) Copyleft 2021 [Frugan](https://about.me/frugan)
+[GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/), see [COPYING](COPYING) file.
