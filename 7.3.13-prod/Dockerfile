@@ -8,9 +8,9 @@ RUN install_packages \
 
 
 #### ImageMagick
-
 #https://github.com/bitnami/bitnami-docker-php-fpm/issues/121
 #https://community.bitnami.com/t/imagemagick-is-not-installed/70980/3
+
 RUN install_packages \
         # Runtime requirements for ImageMagick PHP extension.
         fontconfig-config \
@@ -66,6 +66,33 @@ RUN install_packages \
     ; \
     rm -rf /usr/include/*; \
     rm -rf /tmp/*;
+
+
+#### composer
+#https://docs.php.earth/docker/composer/
+#https://medium.com/@c.harrison/speedy-composer-installs-in-docker-builds-41eea6d0172b
+#https://blog.martinhujer.cz/17-tips-for-using-composer-efficiently/
+#https://github.com/composer/composer/issues/4892#issuecomment-328511850
+#https://getcomposer.org/doc/articles/autoloader-optimization.md
+#https://hackernoon.com/get-composer-to-run-on-docker-container-a-how-to-guide-y86g36z7
+
+RUN install_packages \
+        ca-certificates \
+        curl \
+        git \
+        # As there is no 'unzip' command installed zip files are being unpacked using the PHP zip extension.
+        # This may cause invalid reports of corrupted archives. Besides, any UNIX permissions (e.g. executable) defined in the archives will be lost.
+        # Installing 'unzip' may remediate them.
+        unzip \
+    ;
+
+
+#### mailhog
+
+RUN install_packages \
+        ca-certificates \
+        curl \
+    ;
 
 
 ####
