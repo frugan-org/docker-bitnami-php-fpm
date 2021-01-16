@@ -87,11 +87,13 @@ RUN install_packages \
     ;
 
 
-#### mailhog
+#### msmtp/mailhog
+# Looks like sSMTP is no longer maintained, MSMTP is the suggested replacement.
 
 RUN install_packages \
         ca-certificates \
         curl \
+        msmtp \
     ;
 
 

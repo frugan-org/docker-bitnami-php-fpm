@@ -106,13 +106,18 @@ if [ ! -z "${PHP_WP_CLI_ENABLED}" ]; then
 fi
 
 
-#### mailhog
+#### msmtp/mailhog
+#https://github.com/ilyasotkov/docker-php-msmtp
+#https://github.com/neiltheblue/ssmtp-wordpress
+#https://gist.github.com/orlando/42883f9ed188e45817c50359bc3fa680
 
 if [ "${ENV}" = "develop" ]; then
   curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v${MAILHOG_VERSION}/mhsendmail_linux_amd64;
   chmod +x /usr/local/bin/mhsendmail;
   #https://github.com/swiftmailer/swiftmailer/issues/633
   echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025 -f noreply@localhost"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
+else
+  echo 'sendmail_path="/usr/bin/msmtp -t"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
 fi
 
 
