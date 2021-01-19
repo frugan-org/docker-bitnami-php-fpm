@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
 
@@ -7,7 +7,7 @@ services:
     build:
       context: .
       args:
-        PHP_TAG: ${PHP_TAG}
+        TAG: ${PHP_TAG}
         MAILHOG_VERSION: ${MAILHOG_VERSION}
         NEWRELIC_VERSION: ${NEWRELIC_VERSION}
         NEWRELIC_LICENSE_KEY: ${NEWRELIC_LICENSE_KEY}
