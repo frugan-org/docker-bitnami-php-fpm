@@ -43,7 +43,7 @@ fi
   # W3TC
   echo 'extension=memcached.so';
   #echo 'extension=newrelic.so';
-  #echo 'extension=opcache.so';
+  echo 'extension=opcache.so';
   #echo 'extension=pdo_dblib.so';
   #echo 'extension=pdo_pgsql.so';
   #echo 'extension=pgsql.so';
@@ -108,8 +108,11 @@ fi
 
 #### msmtp/mailhog
 #https://github.com/ilyasotkov/docker-php-msmtp
+#https://github.com/crazy-max/docker-msmtpd
 #https://github.com/neiltheblue/ssmtp-wordpress
 #https://gist.github.com/orlando/42883f9ed188e45817c50359bc3fa680
+#https://webworxshop.com/my-road-to-docker-sorting-out-smtp/
+#https://www.wpdiaries.com/mail-functionality-for-official-docker-wordpress-image/
 
 if [ "${ENV}" = "develop" ]; then
   curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v${MAILHOG_VERSION}/mhsendmail_linux_amd64;
