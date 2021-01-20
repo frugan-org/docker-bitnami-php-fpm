@@ -37,16 +37,20 @@ fi
 
 #https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
 {
-  echo 'extension=apcu.so';
-  #echo 'extension=imap.so';
-  #echo 'extension=maxminddb.so';
+  echo 'extension = apcu'; # available (not actived) in bitnami/php-fpm
+  #echo 'extension = mcrypt'; # available (not actived) in bitnami/php-fpm
+  #echo 'extension = imagick'; # available (not actived) in bitnami/php-fpm
+  #echo 'extension = imap';
+  #echo 'extension = maxminddb'; # available (not actived) in bitnami/php-fpm
+  #echo 'extension = mongodb'; # available (not actived) in bitnami/php-fpm
+  #echo 'zend_extension = xdebug'; # available (not actived) in bitnami/php-fpm
   # W3TC
-  echo 'extension=memcached.so';
-  #echo 'extension=newrelic.so';
-  echo 'zend_extension=opcache.so';
-  #echo 'extension=pdo_dblib.so';
-  #echo 'extension=pdo_pgsql.so';
-  #echo 'extension=pgsql.so';
+  echo 'extension = memcached'; # available (not actived) in bitnami/php-fpm
+  #echo 'extension = newrelic';
+  #echo 'extension = pdo_dblib'; # available (not actived) in bitnami/php-fpm
+  #echo 'extension = pdo_pgsql';
+  #echo 'extension = pgsql';
+  #echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
 } | tee -a /opt/bitnami/php/etc/php.ini;
 
 
