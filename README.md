@@ -4,7 +4,7 @@
 
 Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/bitnami-docker-php-fpm) with optional integration of:
 
-- [Sendmail](https://en.wikipedia.org/wiki/Sendmail)
+- [msmtp](https://marlam.de/msmtp/)
 - [MailHog](https://hub.docker.com/r/mailhog/mailhog/)
 - [Composer](https://getcomposer.org)
 - [WP-CLI](https://wp-cli.org)
