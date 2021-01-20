@@ -43,7 +43,7 @@ fi
   # W3TC
   echo 'extension=memcached.so';
   #echo 'extension=newrelic.so';
-  echo 'extension=opcache.so';
+  echo 'zend_extension=opcache.so';
   #echo 'extension=pdo_dblib.so';
   #echo 'extension=pdo_pgsql.so';
   #echo 'extension=pgsql.so';
