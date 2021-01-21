@@ -1,6 +1,8 @@
 FROM bitnami/php-fpm:7.3-prod
 
 RUN install_packages \
+        #FIXED "sh: 1: tput: not found" with kint-php
+        ncurses-bin \
         patch \
         rsync \
         vim \
