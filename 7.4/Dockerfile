@@ -101,10 +101,10 @@ RUN install_packages \
 
 ####
 
-COPY app-entrypoint.sh /
+COPY entrypoint.sh /
 
 #https://github.com/docker-library/postgres/issues/296#issuecomment-308735942
-RUN chmod +x /app-entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT [ "/app-entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "php-fpm", "-F", "--pid", "/opt/bitnami/php/tmp/php-fpm.pid", "-y", "/opt/bitnami/php/etc/php-fpm.conf" ]

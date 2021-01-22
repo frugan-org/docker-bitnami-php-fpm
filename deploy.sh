@@ -19,7 +19,7 @@ TAGS=(
   7.4-prod
 )
 
-ENTRYPOINT=app-entrypoint.sh
+ENTRYPOINT=entrypoint.sh
 
 for TAG in ${TAGS[*]}; do
 
