@@ -29,9 +29,6 @@ https://github.com/KristinitaTest/KristinitaTest.github.io/blob/master/donate/Bi
 -->
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="200" alt="Buy Me A Coffee">](https://buymeacoff.ee/frugan)
 
-![Donate Me A Bitcoin](https://i.stack.imgur.com/MnQ6V.png)  
-My BTC address `17juoYguPJ6rgGwtkBUaQZeNKMk3mEKkn5`.
-
 ### Usefull links
 
 - https://blog.bitsrc.io/how-to-pass-environment-info-during-docker-builds-1f7c5566dd0e
