@@ -37,20 +37,44 @@ fi
 
 #https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
 {
-  echo 'extension = apcu'; # available (not actived) in bitnami/php-fpm
-  #echo 'extension = mcrypt'; # available (not actived) in bitnami/php-fpm
-  #echo 'extension = imagick'; # available (not actived) in bitnami/php-fpm
-  #echo 'extension = imap';
-  #echo 'extension = maxminddb'; # available (not actived) in bitnami/php-fpm
-  #echo 'extension = mongodb'; # available (not actived) in bitnami/php-fpm
-  #echo 'zend_extension = xdebug'; # available (not actived) in bitnami/php-fpm
+  if [ ! -z "${PHP_APCU_ENABLED}" ]; then
+    echo 'extension = apcu'; # available (not actived) in bitnami/php-fpm
+  fi
+  if [ ! -z "${PHP_MCRYPT_ENABLED}" ]; then
+    echo 'extension = mcrypt'; # available (not actived) in bitnami/php-fpm
+  fi
+  if [ ! -z "${PHP_IMAGICK_ENABLED}" ]; then
+    echo 'extension = imagick'; # available (not actived) in bitnami/php-fpm
+  fi
+  if [ ! -z "${PHP_MAXMINDDB_ENABLED}" ]; then
+    echo 'extension = maxminddb'; # available (not actived) in bitnami/php-fpm
+  fi
+  if [ ! -z "${PHP_MONGODB_ENABLED}" ]; then
+    echo 'extension = mongodb'; # available (not actived) in bitnami/php-fpm
+  fi
+  if [ ! -z "${PHP_XDEBUG_ENABLED}" ]; then
+    echo 'zend_extension = xdebug'; # available (not actived) in bitnami/php-fpm
+  fi
+
   # W3TC
-  echo 'extension = memcached'; # available (not actived) in bitnami/php-fpm
-  #echo 'extension = newrelic';
-  #echo 'extension = pdo_dblib'; # available (not actived) in bitnami/php-fpm
-  #echo 'extension = pdo_pgsql';
-  #echo 'extension = pgsql';
-  #echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
+  if [ ! -z "${PHP_MEMCACHED_ENABLED}" ]; then
+    echo 'extension = memcached'; # available (not actived) in bitnami/php-fpm
+  fi
+  if [ ! -z "${PHP_NEWRELIC_ENABLED}" ]; then
+    echo 'extension = newrelic';
+  fi
+  if [ ! -z "${PHP_PDO_DBLIB_ENABLED}" ]; then
+    echo 'extension = pdo_dblib'; # available (not actived) in bitnami/php-fpm
+  fi
+  if [ ! -z "${PHP_PDO_PGSQL_ENABLED}" ]; then
+    echo 'extension = pdo_pgsql';
+  fi
+  if [ ! -z "${PHP_PGSQL_ENABLED}" ]; then
+    echo 'extension = pgsql';
+  fi
+  #if [ ! -z "${PHP_OPCACHE_ENABLED}" ]; then
+  #  echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
+  #fi
 } | tee -a /opt/bitnami/php/etc/php.ini;
 
 
