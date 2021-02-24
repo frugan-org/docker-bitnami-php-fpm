@@ -2,10 +2,11 @@
 
 # shellcheck disable=SC1091
 
-set -o errexit
-set -o nounset
-set -o pipefail
-# set -o xtrace # Uncomment this line for debugging purpose
+set -e
+#set -o errexit
+#set -o nounset
+#set -o pipefail
+#set -o xtrace # Uncomment this line for debugging purpose
 
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
 if [ ${USER_ID} -ne 0 ] && [ ${GROUP_ID} -ne 0 ]; then
@@ -216,12 +217,15 @@ if [ ! -z "${NEWRELIC_LICENSE_KEY:-}" ]; then
     export NR_INSTALL_USE_CP_NOT_LN=1 && \
     export NR_INSTALL_SILENT=1 && \
     /tmp/newrelic-php5-*/newrelic-install install && \
-    rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
-    #sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"${NEWRELIC_LICENSE_KEY}"/' \
-    sed -i -e 's/"REPLACE_WITH_REAL_KEY"/"'"${NEWRELIC_LICENSE_KEY}"'"/' \
-    #-e 's/newrelic.appname = "PHP Application"/newrelic.appname = "${NEWRELIC_APPLICATION_NAME}"/' \
-    -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
-    /opt/bitnami/php/etc/conf.d/newrelic.ini;
+    rm -rf /tmp/newrelic-php5-* /tmp/nrinstall*; #&& \
+    #sed -i \
+    #  #-e 's/"REPLACE_WITH_REAL_KEY"/"${NEWRELIC_LICENSE_KEY}"/' \
+    #  -e 's/"REPLACE_WITH_REAL_KEY"/"'"${NEWRELIC_LICENSE_KEY}"'"/' \
+    #  #-e 's/newrelic.appname = "PHP Application"/newrelic.appname = "${NEWRELIC_APPLICATION_NAME}"/' \
+    #  -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
+    #  -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
+    #  -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
+    #  /opt/bitnami/php/etc/conf.d/newrelic.ini;
   fi
 fi
 
