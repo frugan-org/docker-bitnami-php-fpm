@@ -210,9 +210,9 @@ if [ ! -z "${NEWRELIC_LICENSE_KEY:-}" ]; then
   #https://superuser.com/a/590170
   #https://superuser.com/a/1249678
   #https://superuser.com/a/742421
-  CURL_OUTPUT=$(curl --head --silent --location --connect-timeout 10 --write-out "%{http_code}" --output /dev/null --show-error --fail https://download.newrelic.com/php_agent/release/newrelic-php5-${NEWRELIC_VERSION}-linux.tar.gz);
+  CURL_OUTPUT=$(curl --head --silent --location --connect-timeout 10 --write-out "%{http_code}" --output /dev/null --show-error --fail https://download.newrelic.com/php_agent/archive/${NEWRELIC_VERSION}/newrelic-php5-${NEWRELIC_VERSION}-linux.tar.gz);
   if [ ${CURL_OUTPUT} -eq 200 ]; then
-    curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-${NEWRELIC_VERSION}-linux.tar.gz | tar -C /tmp -zx && \
+    curl -L https://download.newrelic.com/php_agent/archive/${NEWRELIC_VERSION}/newrelic-php5-${NEWRELIC_VERSION}-linux.tar.gz | tar -C /tmp -zx && \
     export NR_INSTALL_USE_CP_NOT_LN=1 && \
     export NR_INSTALL_SILENT=1 && \
     /tmp/newrelic-php5-*/newrelic-install install && \
