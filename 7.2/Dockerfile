@@ -1,6 +1,7 @@
 FROM bitnami/php-fpm:7.2
 
 RUN install_packages \
+        locales \
         #FIXED "sh: 1: tput: not found" with kint-php
         ncurses-bin \
         patch \
