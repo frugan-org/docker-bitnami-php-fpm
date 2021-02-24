@@ -2,10 +2,11 @@
 
 # shellcheck disable=SC1091
 
-set -o errexit
-set -o nounset
-set -o pipefail
-# set -o xtrace # Uncomment this line for debugging purpose
+set -e
+#set -o errexit
+#set -o nounset
+#set -o pipefail
+#set -o xtrace # Uncomment this line for debugging purpose
 
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
 if [ ${USER_ID} -ne 0 ] && [ ${GROUP_ID} -ne 0 ]; then
