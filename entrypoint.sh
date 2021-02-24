@@ -82,39 +82,39 @@ fi
 
 #https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
 {
-  if [ ! -z "${PHP_APCU_ENABLED}" ]; then
+  if [ ! -z "${PHP_APCU_ENABLED:-}" ]; then
     echo 'extension = apcu'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_MCRYPT_ENABLED}" ]; then
+  if [ ! -z "${PHP_MCRYPT_ENABLED:-}" ]; then
     echo 'extension = mcrypt'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_IMAGICK_ENABLED}" ]; then
+  if [ ! -z "${PHP_IMAGICK_ENABLED:-}" ]; then
     echo 'extension = imagick'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_MAXMINDDB_ENABLED}" ]; then
+  if [ ! -z "${PHP_MAXMINDDB_ENABLED:-}" ]; then
     echo 'extension = maxminddb'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_MONGODB_ENABLED}" ]; then
+  if [ ! -z "${PHP_MONGODB_ENABLED:-}" ]; then
     echo 'extension = mongodb'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_XDEBUG_ENABLED}" ]; then
+  if [ ! -z "${PHP_XDEBUG_ENABLED:-}" ]; then
     echo 'zend_extension = xdebug'; # available (not actived) in bitnami/php-fpm
   fi
 
   # W3TC
-  if [ ! -z "${PHP_MEMCACHED_ENABLED}" ]; then
+  if [ ! -z "${PHP_MEMCACHED_ENABLED:-}" ]; then
     echo 'extension = memcached'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_NEWRELIC_ENABLED}" ]; then
+  if [ ! -z "${PHP_NEWRELIC_ENABLED:-}" ]; then
     echo 'extension = newrelic';
   fi
-  if [ ! -z "${PHP_PDO_DBLIB_ENABLED}" ]; then
+  if [ ! -z "${PHP_PDO_DBLIB_ENABLED:-}" ]; then
     echo 'extension = pdo_dblib'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_PDO_PGSQL_ENABLED}" ]; then
+  if [ ! -z "${PHP_PDO_PGSQL_ENABLED:-}" ]; then
     echo 'extension = pdo_pgsql';
   fi
-  if [ ! -z "${PHP_PGSQL_ENABLED}" ]; then
+  if [ ! -z "${PHP_PGSQL_ENABLED:-}" ]; then
     echo 'extension = pgsql';
   fi
   #if [ ! -z "${PHP_OPCACHE_ENABLED}" ]; then
@@ -127,9 +127,9 @@ fi
 #https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/
 #https://stackoverflow.com/a/43878779/3929620
 #https://bugzilla.redhat.com/show_bug.cgi?id=1245780
-if [ ! -z "${PHP_COMPOSER_PATH}" ]; then
+if [ ! -z "${PHP_COMPOSER_PATH:-}" ]; then
 
-  if [ ! -z "${PHP_COMPOSER_VERSION}" ]; then
+  if [ ! -z "${PHP_COMPOSER_VERSION:-}" ]; then
     curl -sS https://getcomposer.org/installer | php -- \
       --install-dir=/usr/local/bin \
       --filename=composer \
@@ -144,13 +144,13 @@ if [ ! -z "${PHP_COMPOSER_PATH}" ]; then
 
   rm -Rf ~/.composer;
 
-  if [ ! -z "${GITHUB_TOKEN}" ]; then
+  if [ ! -z "${GITHUB_TOKEN:-}" ]; then
     runuser -l daemon -c "PATH=$PATH; composer config -g github-oauth.github.com ${GITHUB_TOKEN}";
   fi
 
   #https://blog.martinhujer.cz/17-tips-for-using-composer-efficiently/
   #https://github.com/composer/composer/issues/8913
-  if [ ! -z "${PHP_COMPOSER_VERSION}" ]; then
+  if [ ! -z "${PHP_COMPOSER_VERSION:-}" ]; then
     composer self-update ${PHP_COMPOSER_VERSION};
   else
     composer self-update;
@@ -173,7 +173,7 @@ fi
 #https://wp-cli.org/it/#installazione
 #https://github.com/tatemz/docker-wpcli/blob/master/Dockerfile
 
-if [ ! -z "${PHP_WP_CLI_ENABLED}" ]; then
+if [ ! -z "${PHP_WP_CLI_ENABLED:-}" ]; then
   curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar;
   chmod +x /usr/local/bin/wp;
 fi
@@ -201,7 +201,7 @@ fi
 #https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/install-php-agent-docker
 #https://stackoverflow.com/a/584926/3929620
 
-if [ ! -z "${NEWRELIC_LICENSE_KEY}" ]; then
+if [ ! -z "${NEWRELIC_LICENSE_KEY:-}" ]; then
   #https://stackoverflow.com/a/53935189/3929620
   #https://superuser.com/a/442395
   #https://curl.haxx.se/mail/archive-2018-02/0027.html
