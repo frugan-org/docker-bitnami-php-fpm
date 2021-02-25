@@ -83,6 +83,7 @@ fi
 
 #https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
 {
+  # W3TC: memcached, newrelic, pdo_dblib, pdo_pgsql, pgsql, opcache
   if [ ! -z "${PHP_APCU_ENABLED:-}" ]; then
     echo 'extension = apcu'; # available (not actived) in bitnami/php-fpm
   fi
@@ -101,22 +102,11 @@ fi
   if [ ! -z "${PHP_XDEBUG_ENABLED:-}" ]; then
     echo 'zend_extension = xdebug'; # available (not actived) in bitnami/php-fpm
   fi
-
-  # W3TC
   if [ ! -z "${PHP_MEMCACHED_ENABLED:-}" ]; then
     echo 'extension = memcached'; # available (not actived) in bitnami/php-fpm
   fi
-  if [ ! -z "${PHP_NEWRELIC_ENABLED:-}" ]; then
-    echo 'extension = newrelic';
-  fi
   if [ ! -z "${PHP_PDO_DBLIB_ENABLED:-}" ]; then
     echo 'extension = pdo_dblib'; # available (not actived) in bitnami/php-fpm
-  fi
-  if [ ! -z "${PHP_PDO_PGSQL_ENABLED:-}" ]; then
-    echo 'extension = pdo_pgsql';
-  fi
-  if [ ! -z "${PHP_PGSQL_ENABLED:-}" ]; then
-    echo 'extension = pgsql';
   fi
   #if [ ! -z "${PHP_OPCACHE_ENABLED}" ]; then
   #  echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
@@ -217,15 +207,11 @@ if [ ! -z "${NEWRELIC_LICENSE_KEY:-}" ]; then
     export NR_INSTALL_USE_CP_NOT_LN=1 && \
     export NR_INSTALL_SILENT=1 && \
     /tmp/newrelic-php5-*/newrelic-install install && \
-    rm -rf /tmp/newrelic-php5-* /tmp/nrinstall*; #&& \
-    #sed -i \
-    #  #-e 's/"REPLACE_WITH_REAL_KEY"/"${NEWRELIC_LICENSE_KEY}"/' \
-    #  -e 's/"REPLACE_WITH_REAL_KEY"/"'"${NEWRELIC_LICENSE_KEY}"'"/' \
-    #  #-e 's/newrelic.appname = "PHP Application"/newrelic.appname = "${NEWRELIC_APPLICATION_NAME}"/' \
-    #  -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
-    #  -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
-    #  -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
-    #  /opt/bitnami/php/etc/conf.d/newrelic.ini;
+    rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
+    sed -i \
+      -e 's/"REPLACE_WITH_REAL_KEY"/"'"${NEWRELIC_LICENSE_KEY}"'"/' \
+      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
+      /opt/bitnami/php/etc/conf.d/newrelic.ini;
   fi
 fi
 
