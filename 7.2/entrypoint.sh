@@ -192,7 +192,7 @@ fi
 #https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/install-php-agent-docker
 #https://stackoverflow.com/a/584926/3929620
 
-if [ ! -z "${NEWRELIC_LICENSE_KEY:-}" ]; then
+if [ ! -z "${PHP_NEWRELIC_ENABLED:-}" ]; then
   #https://stackoverflow.com/a/53935189/3929620
   #https://superuser.com/a/442395
   #https://curl.haxx.se/mail/archive-2018-02/0027.html
@@ -208,10 +208,10 @@ if [ ! -z "${NEWRELIC_LICENSE_KEY:-}" ]; then
     export NR_INSTALL_SILENT=1 && \
     /tmp/newrelic-php5-*/newrelic-install install && \
     rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
-    sed -i \
-      -e 's/"REPLACE_WITH_REAL_KEY"/"'"${NEWRELIC_LICENSE_KEY}"'"/' \
-      -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
-      /opt/bitnami/php/etc/conf.d/newrelic.ini;
+    #sed -i \
+    #  -e 's/"REPLACE_WITH_REAL_KEY"/"'"${NEWRELIC_LICENSE_KEY}"'"/' \
+    #  -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
+    #  /opt/bitnami/php/etc/conf.d/newrelic.ini;
   fi
 fi
 
