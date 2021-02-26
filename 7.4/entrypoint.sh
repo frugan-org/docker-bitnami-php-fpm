@@ -207,7 +207,7 @@ if [ ! -z "${PHP_NEWRELIC_ENABLED:-}" ]; then
     export NR_INSTALL_USE_CP_NOT_LN=1 && \
     export NR_INSTALL_SILENT=1 && \
     /tmp/newrelic-php5-*/newrelic-install install && \
-    rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
+    rm -rf /tmp/newrelic-php5-* /tmp/nrinstall*; # && \
     #sed -i \
     #  -e 's/"REPLACE_WITH_REAL_KEY"/"'"${NEWRELIC_LICENSE_KEY}"'"/' \
     #  -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
