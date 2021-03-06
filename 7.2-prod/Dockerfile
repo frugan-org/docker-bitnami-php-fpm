@@ -10,67 +10,6 @@ RUN install_packages \
     ;
 
 
-#### ImageMagick
-#https://github.com/bitnami/bitnami-docker-php-fpm/issues/121
-#https://community.bitnami.com/t/imagemagick-is-not-installed/70980/3
-
-RUN install_packages \
-        # Runtime requirements for ImageMagick PHP extension.
-        fontconfig-config \
-        fonts-dejavu-core \
-        imagemagick-6-common \
-        libfftw3-double3 \
-        libfontconfig1 \
-        libglib2.0-0 \
-        libgomp1 \
-        libjbig0 \
-        liblcms2-2 \
-        liblqr-1-0 \
-        libltdl7 \
-        libmagickcore-6.q16-6 \
-        libmagickwand-6.q16-6 \
-        libopenjp2-7 \
-        libtiff5 \
-        libx11-6 \
-        libx11-data \
-        libxau6 \
-        libxcb1 \
-        libxdmcp6 \
-        libxext6 \
-        unzip \
-        \
-        # Compile-time requirements for ImageMagick PHP extension.
-        autoconf \
-        gcc \
-        libc-dev \
-        libmagickwand-dev \
-        make \
-        pkg-config \
-    ; \
-    \
-    # Install imagick php extension and enable it
-    # At one point in the installer, a default value should be used, which
-    # requires the user to press enter the echo simulates this interaction
-    pecl channel-update pecl.php.net; \
-    pecl install imagick; \
-    \
-    echo "extension=imagick.so" > /opt/bitnami/php/etc/conf.d/imagemagick.ini; \
-    \
-    echo "[www]\nenv[MAGICK_CODER_MODULE_PATH]='/usr/lib/x86_64-linux-gnu/ImageMagick-6.9.10/modules-Q16/coders'" > /opt/bitnami/php/etc/php-fpm.d/imagemagick.conf; \
-    \
-    # remove stuff which is only required for installation of ImageMagick
-    apt-get -y remove --auto-remove \
-        autoconf \
-        gcc \
-        libc-dev \
-        libmagickwand-dev \
-        make \
-        pkg-config \
-    ; \
-    rm -rf /usr/include/*; \
-    rm -rf /tmp/*;
-
-
 #### composer
 #https://docs.php.earth/docker/composer/
 #https://medium.com/@c.harrison/speedy-composer-installs-in-docker-builds-41eea6d0172b
