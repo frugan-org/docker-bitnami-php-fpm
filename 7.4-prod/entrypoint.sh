@@ -118,7 +118,7 @@ fi
 #https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/
 #https://stackoverflow.com/a/43878779/3929620
 #https://bugzilla.redhat.com/show_bug.cgi?id=1245780
-if [ ! -z "${PHP_COMPOSER_PATH:-}" ]; then
+if [ ! -z "${PHP_COMPOSER_PATHS:-}" ]; then
 
   if [ ! -z "${PHP_COMPOSER_VERSION:-}" ]; then
     curl -sS https://getcomposer.org/installer | php -- \
@@ -147,16 +147,19 @@ if [ ! -z "${PHP_COMPOSER_PATH:-}" ]; then
     composer self-update;
   fi
 
-  if [ "${ENV}" = "develop" ]; then
-    #https://github.com/composer/composer/issues/4892#issuecomment-328511850
-    #composer clear-cache;
-    runuser -l daemon -c "PATH=$PATH; cd ${PHP_COMPOSER_PATH}; composer update --optimize-autoloader --no-interaction";
-    runuser -l daemon -c "PATH=$PATH; cd ${PHP_COMPOSER_PATH}; composer validate --no-check-all"; # --strict
-  else
-    #https://getcomposer.org/doc/articles/autoloader-optimization.md
-    runuser -l daemon -c "PATH=$PATH; cd ${PHP_COMPOSER_PATH}; composer update --optimize-autoloader --classmap-authoritative --no-dev --no-interaction";
-  fi
-
+  IFS=',' read -ra paths <<< "${PHP_COMPOSER_PATHS}";
+  for path in "${paths[@]}"
+  do
+    if [ "${ENV}" = "develop" ]; then
+      #https://github.com/composer/composer/issues/4892#issuecomment-328511850
+      #composer clear-cache;
+      runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --no-interaction";
+      runuser -l daemon -c "PATH=$PATH; cd ${path}; composer validate --no-check-all"; # --strict
+    else
+      #https://getcomposer.org/doc/articles/autoloader-optimization.md
+      runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --classmap-authoritative --no-dev --no-interaction";
+    fi
+  done
 fi
 
 
