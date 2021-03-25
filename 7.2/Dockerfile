@@ -7,6 +7,7 @@ RUN install_packages \
         patch \
         rsync \
         vim \
+        zip \
     ;
 
 
