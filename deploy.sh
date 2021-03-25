@@ -11,6 +11,8 @@ deploy() {
 }
 
 TAGS=(
+  7.0
+  7.0-prod
   7.1
   7.1-prod
   7.2
