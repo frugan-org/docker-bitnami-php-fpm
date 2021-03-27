@@ -1,6 +1,8 @@
 FROM bitnami/php-fpm:7.2-prod
 
 RUN install_packages \
+        # required by wp ewwwio optimize https://docs.ewww.io/article/25-optimizing-with-wp-cli
+        less \
         locales \
         #FIXED "sh: 1: tput: not found" with kint-php
         ncurses-bin \
