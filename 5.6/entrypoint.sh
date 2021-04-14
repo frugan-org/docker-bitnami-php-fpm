@@ -144,7 +144,7 @@ if [ ! -z "${PHP_COMPOSER_PATHS:-}" ]; then
   if [ ! -z "${PHP_COMPOSER_VERSION:-}" ]; then
     composer self-update ${PHP_COMPOSER_VERSION};
   else
-    composer self-update;
+    composer self-update --2;
   fi
 
   IFS=',' read -ra paths <<< "${PHP_COMPOSER_PATHS}";
