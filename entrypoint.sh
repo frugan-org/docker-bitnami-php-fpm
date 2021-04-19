@@ -141,8 +141,8 @@ if [ ! -z "${PHP_COMPOSER_PATHS:-}" ]; then
 
   #https://blog.martinhujer.cz/17-tips-for-using-composer-efficiently/
   #https://github.com/composer/composer/issues/8913
-  if [ ! -z "${PHP_COMPOSER_VERSION:-}" ]; then
-    composer self-update ${PHP_COMPOSER_VERSION};
+  if [ ! -z "${PHP_COMPOSER_ARG:-}" ]; then
+    composer self-update ${PHP_COMPOSER_ARG};
   else
     composer self-update;
   fi
