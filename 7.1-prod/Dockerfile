@@ -25,6 +25,8 @@ RUN install_packages \
         ca-certificates \
         curl \
         git \
+        # used in some projects with repositories -> type: svn
+        subversion \
         # As there is no 'unzip' command installed zip files are being unpacked using the PHP zip extension.
         # This may cause invalid reports of corrupted archives. Besides, any UNIX permissions (e.g. executable) defined in the archives will be lost.
         # Installing 'unzip' may remediate them.
