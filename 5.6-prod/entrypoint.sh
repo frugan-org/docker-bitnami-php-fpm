@@ -219,4 +219,11 @@ if [ ! -z "${PHP_NEWRELIC_ENABLED:-}" ]; then
 fi
 
 
+####
+
+if [ -f "/extrypoint-after.sh" ]; then
+  . /extrypoint-after.sh;
+fi
+
+
 exec "$@"
