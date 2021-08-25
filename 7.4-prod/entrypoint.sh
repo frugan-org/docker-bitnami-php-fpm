@@ -65,13 +65,19 @@ fi
 locale-gen
 
 
-#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
-#https://stackoverflow.com/a/58067682
-#https://stackoverflow.com/a/30822781
-#https://wordpress.stackexchange.com/a/286098/99214
 {
   echo '';
+
+  #https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
+  #https://stackoverflow.com/a/58067682
+  #https://stackoverflow.com/a/30822781
+  #https://wordpress.stackexchange.com/a/286098/99214
   echo 'env[ENV] = '"${ENV}";
+
+  #https://mattallan.me/posts/how-php-environment-variables-actually-work/
+  #https://github.com/docker-library/php/issues/74
+  #https://stackoverflow.com/a/58067682/3929620
+  #echo 'clear_env = no';
 } >> /opt/bitnami/php/etc/environment.conf;
 
 if [ "${ENV}" = "develop" ]; then
