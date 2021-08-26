@@ -227,7 +227,7 @@ fi
 
 ####
 
-FILE=/extrypoint-after.sh
+FILE=/entrypoint-after.sh
 if [ -f "$FILE" ]; then
   . $FILE;
 fi
