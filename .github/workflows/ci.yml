@@ -34,7 +34,7 @@ jobs:
         with:
           context: ./5.6
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:5.6
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:5.6
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -43,7 +43,7 @@ jobs:
         with:
           context: ./5.6-prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:5.6-prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:5.6-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -52,7 +52,7 @@ jobs:
         with:
           context: ./7.0
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.0
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.0
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -61,7 +61,7 @@ jobs:
         with:
           context: ./7.0-prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.0-prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.0-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -70,7 +70,7 @@ jobs:
         with:
           context: ./7.1
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.1
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -79,7 +79,7 @@ jobs:
         with:
           context: ./7.1-prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.1-prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.1-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -88,7 +88,7 @@ jobs:
         with:
           context: ./7.2
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.2
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.2
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -97,7 +97,7 @@ jobs:
         with:
           context: ./7.2-prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.2-prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.2-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -106,7 +106,7 @@ jobs:
         with:
           context: ./7.3
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.3
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.3
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -115,7 +115,7 @@ jobs:
         with:
           context: ./7.3-prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.3-prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.3-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -124,7 +124,7 @@ jobs:
         with:
           context: ./7.4
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.4
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.4
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -133,7 +133,7 @@ jobs:
         with:
           context: ./7.4-prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.4-prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.4-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -142,7 +142,7 @@ jobs:
         with:
           context: ./8.0
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:8.0,${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:8.0,${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
@@ -151,7 +151,7 @@ jobs:
         with:
           context: ./8.0-prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:8.0-prod,${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:latest-prod
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:8.0-prod,${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:latest-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       # Docker Hub Personal Access Tokens cannot be used as they are not supported by the API.
@@ -162,5 +162,5 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm
           short-description: ${{ github.event.repository.description }}
