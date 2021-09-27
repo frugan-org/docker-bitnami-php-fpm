@@ -9,7 +9,7 @@ set -e
 #set -o xtrace # Uncomment this line for debugging purpose
 
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
-if [ ${USER_ID} -ne 0 ] && [ ${GROUP_ID} -ne 0 ]; then
+if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then
   userdel -f daemon;
   if getent group daemon; then
       groupdel daemon;
@@ -65,13 +65,19 @@ fi
 locale-gen
 
 
-#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
-#https://stackoverflow.com/a/58067682
-#https://stackoverflow.com/a/30822781
-#https://wordpress.stackexchange.com/a/286098/99214
 {
   echo '';
+
+  #https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
+  #https://stackoverflow.com/a/58067682
+  #https://stackoverflow.com/a/30822781
+  #https://wordpress.stackexchange.com/a/286098/99214
   echo 'env[ENV] = '"${ENV}";
+
+  #https://mattallan.me/posts/how-php-environment-variables-actually-work/
+  #https://github.com/docker-library/php/issues/74
+  #https://stackoverflow.com/a/58067682/3929620
+  #echo 'clear_env = no';
 } >> /opt/bitnami/php/etc/environment.conf;
 
 if [ "${ENV}" = "develop" ]; then
@@ -216,6 +222,14 @@ if [ ! -z "${PHP_NEWRELIC_ENABLED:-}" ]; then
     #  -e 's/newrelic.appname = "PHP Application"/newrelic.appname = "'"${NEWRELIC_APPLICATION_NAME}"'"/' \
     #  /opt/bitnami/php/etc/conf.d/newrelic.ini;
   fi
+fi
+
+
+####
+
+FILE=/entrypoint-after.sh
+if [ -f "$FILE" ]; then
+  . $FILE;
 fi
 
 

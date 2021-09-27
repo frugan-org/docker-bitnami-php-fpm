@@ -1,0 +1,166 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      #https://github.com/docker/build-push-action/issues/281#issuecomment-766168048
+      # By default, this action uses the Git context so you don't need to use the actions/checkout action to checkout the repository
+      # because this will be done directly by buildkit. The git reference will be based on the event that triggered your workflow
+      # and will result in the following context: https://github.com/<owner>/<repo>.git#<ref>.
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push [5.6]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./5.6
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:5.6
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [5.6-prod]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./5.6-prod
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:5.6-prod
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.0]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.0
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.0
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.0-prod]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.0-prod
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.0-prod
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.1]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.1
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.1
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.1-prod]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.1-prod
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.1-prod
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.2]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.2
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.2
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.2-prod]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.2-prod
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.2-prod
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.3]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.3
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.3
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.3-prod]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.3-prod
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.3-prod
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.4]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.4
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.4
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [7.4-prod]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./7.4-prod
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:7.4-prod
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [8.0, latest]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./8.0
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:8.0,${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      -
+        name: Build and push [8.0-prod, latest-prod]
+        uses: docker/build-push-action@v2
+        with:
+          context: ./8.0-prod
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:8.0-prod,${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm:latest-prod
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      # Docker Hub Personal Access Tokens cannot be used as they are not supported by the API.
+      # Unfortunately, this means that enabling 2FA on Docker Hub will prevent the action from working.
+      -
+        name: Update repo description
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/docker-bitnami-php-fpm
+          short-description: ${{ github.event.repository.description }}
