@@ -9,7 +9,7 @@ set -e
 #set -o xtrace # Uncomment this line for debugging purpose
 
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
-if [ ${USER_ID} -ne 0 ] && [ ${GROUP_ID} -ne 0 ]; then
+if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then
   userdel -f daemon;
   if getent group daemon; then
       groupdel daemon;
