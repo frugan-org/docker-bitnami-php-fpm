@@ -4,6 +4,7 @@
 
 Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/bitnami-docker-php-fpm) with optional integration of:
 
+- [wait-for-it](https://github.com/vishnubob/wait-for-it)
 - [msmtp](https://marlam.de/msmtp/)
 - [MailHog](https://hub.docker.com/r/mailhog/mailhog/)
 - [Composer](https://getcomposer.org)
