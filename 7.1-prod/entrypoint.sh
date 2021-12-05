@@ -33,7 +33,7 @@ if [ ! -z "${PHP_WAITFORIT_CONTAINER_NAME:-}" ] && [ ! -z "${PHP_WAITFORIT_CONTA
   if curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh --output /tmp/wait-for-it.sh -sS --fail > /dev/null 2>&1 ; then
     if [ "$(file -b --mime-type '/tmp/wait-for-it.sh')" == "text/x-shellscript" ]; then
       echo "waiting for ${PHP_WAITFORIT_CONTAINER_NAME}...";
-      chmod +x  /tmp/wait-for-it.sh;
+      chmod +x /tmp/wait-for-it.sh;
       /tmp/wait-for-it.sh ${PHP_WAITFORIT_CONTAINER_NAME}:${PHP_WAITFORIT_CONTAINER_PORT} -t 0 -- echo "${PHP_WAITFORIT_CONTAINER_NAME} is ready";
     fi
     rm /tmp/wait-for-it.sh;
