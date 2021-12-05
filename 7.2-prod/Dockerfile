@@ -1,6 +1,7 @@
 FROM bitnami/php-fpm:7.2-prod
 
 RUN install_packages \
+        file \
         # required by wp ewwwio optimize https://docs.ewww.io/article/25-optimizing-with-wp-cli
         less \
         locales \
