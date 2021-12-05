@@ -8,6 +8,19 @@ set -e
 #set -o pipefail
 #set -o xtrace # Uncomment this line for debugging purpose
 
+#https://docs.docker.com/compose/startup-order/
+if [ ! -z "${PHP_WAITFORIT_CONTAINER_NAME:-}" ] && [ ! -z "${PHP_WAITFORIT_CONTAINER_PORT:-}" ]; then
+  #https://git.eeqj.de/external/mailinabox/commit/1d6793d12434a407d47efa7dc276f63227ad29e5
+  if curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh --output /tmp/wait-for-it.sh -sS --fail > /dev/null 2>&1 ; then
+    if [ "\$(file -b --mime-type /tmp/wait-for-it.sh)" == "text/x-shellscript" ]; then
+      echo "waiting for ${PHP_WAITFORIT_CONTAINER_NAME}..."
+      /tmp/wait-for-it.sh ${PHP_WAITFORIT_CONTAINER_NAME}:${PHP_WAITFORIT_CONTAINER_PORT} -t 0 -- echo "${PHP_WAITFORIT_CONTAINER_NAME} is ready"
+    fi
+    rm /tmp/wait-for-it.sh
+  fi
+fi
+
+
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
 if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then
   userdel -f daemon;
