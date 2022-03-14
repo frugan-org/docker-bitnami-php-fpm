@@ -22,9 +22,8 @@ TAGS=(
   7.3
   7.3-prod
   7.4
-  7.4-prod
   8.0
-  8.0-prod
+  8.1
 )
 
 ENTRYPOINT=entrypoint.sh

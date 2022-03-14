@@ -1,4 +1,4 @@
-FROM bitnami/php-fpm:7.4-prod
+FROM bitnami/php-fpm:8.1
 
 RUN install_packages \
         file \
