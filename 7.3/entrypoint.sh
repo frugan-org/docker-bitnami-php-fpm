@@ -202,7 +202,7 @@ fi
 #https://www.wpdiaries.com/mail-functionality-for-official-docker-wordpress-image/
 
 if [ "${ENV}" = "develop" ]; then
-  curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v${MAILHOG_VERSION}/mhsendmail_linux_amd64;
+  curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v${MAILHOG_SENDMAIL_VERSION}/mhsendmail_linux_amd64;
   chmod +x /usr/local/bin/mhsendmail;
   #https://github.com/swiftmailer/swiftmailer/issues/633
   echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025 -f noreply@localhost"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
