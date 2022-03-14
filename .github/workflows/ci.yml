@@ -125,7 +125,7 @@ jobs:
         with:
           context: ./7.4
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.4
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.4,${{ secrets.DOCKERHUB_USERNAME }}/bitnami-php-fpm:7.4-prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
