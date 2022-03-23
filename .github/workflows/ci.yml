@@ -150,7 +150,7 @@ jobs:
       # Unfortunately, this means that enabling 2FA on Docker Hub will prevent the action from working.
       -
         name: Update repo description
-        uses: peter-evans/dockerhub-description@v2
+        uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
