@@ -204,8 +204,15 @@ fi
 if [ "${ENV}" = "develop" ]; then
   curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v${MAILHOG_SENDMAIL_VERSION}/mhsendmail_linux_amd64;
   chmod +x /usr/local/bin/mhsendmail;
+
   #https://github.com/swiftmailer/swiftmailer/issues/633
-  echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025 -f noreply@localhost"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
+  if [ ! -z "${PHP_SENDMAIL_PATH:-}" ]; then
+    echo 'sendmail_path="'${PHP_SENDMAIL_PATH}'"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
+  else
+    echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025 -bs -f noreply@localhost"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
+  fi
+elif [ ! -z "${PHP_SENDMAIL_PATH:-}" ]; then
+  echo 'sendmail_path="'${PHP_SENDMAIL_PATH}'"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
 else
   echo 'sendmail_path="/usr/bin/msmtp -t"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
 fi
