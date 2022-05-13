@@ -214,7 +214,7 @@ if [ "${ENV}" = "develop" ]; then
 elif [ ! -z "${PHP_SENDMAIL_PATH:-}" ]; then
   echo 'sendmail_path="'${PHP_SENDMAIL_PATH}'"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
 else
-  echo 'sendmail_path="/usr/bin/msmtp -t"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
+  echo 'sendmail_path="/usr/bin/msmtp -io -t"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
 fi
 
 
