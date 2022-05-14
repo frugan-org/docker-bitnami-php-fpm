@@ -209,7 +209,7 @@ if [ "${ENV}" = "develop" ]; then
   if [ ! -z "${PHP_SENDMAIL_PATH:-}" ]; then
     echo 'sendmail_path="'${PHP_SENDMAIL_PATH}'"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
   else
-    echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025 -f noreply@localhost"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
+    echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
   fi
 elif [ ! -z "${PHP_SENDMAIL_PATH:-}" ]; then
   echo 'sendmail_path="'${PHP_SENDMAIL_PATH}'"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
