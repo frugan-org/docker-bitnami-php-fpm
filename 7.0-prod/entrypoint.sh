@@ -167,6 +167,12 @@ if [ ! -z "${PHP_COMPOSER_PATHS:-}" ]; then
     composer self-update;
   fi
 
+  IFS=',' read -ra libs <<< "${PHP_COMPOSER_GLOBAL_LIBS}";
+  for lib in "${libs[@]}"
+  do
+    runuser -l daemon -c "PATH=$PATH; composer global require ${lib}";
+  done
+
   IFS=',' read -ra paths <<< "${PHP_COMPOSER_PATHS}";
   for path in "${paths[@]}"
   do
