@@ -2,7 +2,7 @@
 
 # Docker Bitnami PHP-FPM
 
-Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/bitnami-docker-php-fpm) with optional integration of:
+Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/containers/tree/main/bitnami/php-fpm) with optional integration of:
 
 - [wait-for-it](https://github.com/vishnubob/wait-for-it)
 - [msmtp](https://marlam.de/msmtp/)

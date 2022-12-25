@@ -138,7 +138,7 @@ fi
 #https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/
 #https://stackoverflow.com/a/43878779/3929620
 #https://bugzilla.redhat.com/show_bug.cgi?id=1245780
-if [ ! -z "${PHP_COMPOSER_PATHS:-}" ]; then
+if [ ! -z "${PHP_COMPOSER_ENABLED:-}" ]; then
 
   if [ ! -z "${PHP_COMPOSER_VERSION:-}" ]; then
     curl -sS https://getcomposer.org/installer | php -- \
