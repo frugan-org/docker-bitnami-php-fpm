@@ -128,9 +128,14 @@ fi
   if [ ! -z "${PHP_PDO_DBLIB_ENABLED:-}" ]; then
     echo 'extension = pdo_dblib'; # available (not actived) in bitnami/php-fpm
   fi
-  #if [ ! -z "${PHP_OPCACHE_ENABLED}" ]; then
+  #if [ ! -z "${PHP_OPCACHE_ENABLED:-}" ]; then
   #  echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
   #fi
+
+  #https://php.watch/articles/jit-in-depth
+  if [ ! -z "${PHP_JIT_BUFFER_SIZE:-}" ]; then
+    echo "opcache.jit_buffer_size = ${PHP_JIT_BUFFER_SIZE:-0}"; # not available in bitnami/php-fpm
+  fi
 } | tee -a /opt/bitnami/php/etc/php.ini;
 
 
