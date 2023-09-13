@@ -31,7 +31,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push [8.0]
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ./8.0
           push: true
@@ -40,7 +40,7 @@ jobs:
           cache-to: type=gha,mode=max
       -
         name: Build and push [8.1]
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ./8.1
           push: true
@@ -49,7 +49,7 @@ jobs:
           cache-to: type=gha,mode=max
       -
         name: Build and push [8.2, latest]
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ./8.2
           push: true
