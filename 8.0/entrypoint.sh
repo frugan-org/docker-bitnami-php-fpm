@@ -94,7 +94,7 @@ locale-gen
   #echo 'clear_env = no';
 } >> /opt/bitnami/php/etc/environment.conf;
 
-if [ "${ENV}" = "develop" ]; then
+if [ "${ENV}" != "production" ]; then
   {
     echo 'user_ini.filename = ".user-'"${ENV}"'.ini"';
     echo 'user_ini.cache_ttl = 0';
@@ -181,14 +181,14 @@ if [ ! -z "${PHP_COMPOSER_ENABLED:-}" ]; then
   IFS=',' read -ra paths <<< "${PHP_COMPOSER_PATHS}";
   for path in "${paths[@]}"
   do
-    if [ "${ENV}" = "develop" ]; then
+    if [ "${ENV}" = "production" ]; then
+      #https://getcomposer.org/doc/articles/autoloader-optimization.md
+      runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --classmap-authoritative --no-dev --no-interaction";
+    else
       #https://github.com/composer/composer/issues/4892#issuecomment-328511850
       #composer clear-cache;
       runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --no-interaction";
       runuser -l daemon -c "PATH=$PATH; cd ${path}; composer validate --no-check-all"; # --strict
-    else
-      #https://getcomposer.org/doc/articles/autoloader-optimization.md
-      runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --classmap-authoritative --no-dev --no-interaction";
     fi
   done
 fi
@@ -212,7 +212,13 @@ fi
 #https://webworxshop.com/my-road-to-docker-sorting-out-smtp/
 #https://www.wpdiaries.com/mail-functionality-for-official-docker-wordpress-image/
 
-if [ "${ENV}" = "develop" ]; then
+if [ "${ENV}" = "production" ]; then
+  if [ ! -z "${PHP_SENDMAIL_PATH:-}" ]; then
+    echo 'sendmail_path="'${PHP_SENDMAIL_PATH}'"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
+  else
+    echo 'sendmail_path="/usr/bin/msmtp -t"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
+  fi
+else
   curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v${MAILHOG_SENDMAIL_VERSION}/mhsendmail_linux_amd64;
   chmod +x /usr/local/bin/mhsendmail;
 
@@ -222,10 +228,6 @@ if [ "${ENV}" = "develop" ]; then
   else
     echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025"' > /opt/bitnami/php/etc/conf.d/mailhog.ini;
   fi
-elif [ ! -z "${PHP_SENDMAIL_PATH:-}" ]; then
-  echo 'sendmail_path="'${PHP_SENDMAIL_PATH}'"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
-else
-  echo 'sendmail_path="/usr/bin/msmtp -t"' > /opt/bitnami/php/etc/conf.d/msmtp.ini;
 fi
 
 
