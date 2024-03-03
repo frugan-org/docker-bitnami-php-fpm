@@ -85,7 +85,7 @@ locale-gen
 	#https://stackoverflow.com/a/30822781
 	#https://wordpress.stackexchange.com/a/286098/99214
 	#https://laravel.com/docs/10.x/configuration
-	https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
+	#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
 	echo 'env[APP_ENV] = '"${APP_ENV}"
 
 	#https://mattallan.me/posts/how-php-environment-variables-actually-work/
