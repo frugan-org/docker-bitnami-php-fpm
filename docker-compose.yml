@@ -16,8 +16,6 @@ services:
     networks:
       - default
     environment:
-      #DEPRECATED
-      ENV: ${ENV}
       APP_ENV: ${APP_ENV}
       USER_ID: ${USER_ID}
       GROUP_ID: ${GROUP_ID}

@@ -78,7 +78,7 @@ locale-gen
 	echo ''
 
 	#DEPRECATED
-	echo 'env[ENV] = '"${ENV}"
+	echo 'env[ENV] = '"${ENV:-production}"
 
 	#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
 	#https://stackoverflow.com/a/58067682
@@ -86,7 +86,7 @@ locale-gen
 	#https://wordpress.stackexchange.com/a/286098/99214
 	#https://laravel.com/docs/10.x/configuration
 	#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
-	echo 'env[APP_ENV] = '"${APP_ENV}"
+	echo 'env[APP_ENV] = '"${APP_ENV:-production}"
 
 	#https://mattallan.me/posts/how-php-environment-variables-actually-work/
 	#https://github.com/docker-library/php/issues/74
@@ -94,9 +94,9 @@ locale-gen
 	#echo 'clear_env = no';
 } >>/opt/bitnami/php/etc/environment.conf
 
-if [ "${APP_ENV}" != "production" ]; then
+if [ "${APP_ENV:-production}" != "production" ]; then
 	{
-		echo 'user_ini.filename = ".user-'"${APP_ENV}"'.ini"'
+		echo 'user_ini.filename = ".user-'"${APP_ENV:-production}"'.ini"'
 		echo 'user_ini.cache_ttl = 0'
 	} >>/opt/bitnami/php/etc/php.ini
 fi
@@ -178,7 +178,7 @@ if [ -n "${PHP_COMPOSER_ENABLED:-}" ]; then
 
 	IFS=',' read -ra paths <<<"${PHP_COMPOSER_PATHS}"
 	for path in "${paths[@]}"; do
-		if [ "${APP_ENV}" = "production" ]; then
+		if [ "${APP_ENV:-production}" = "production" ]; then
 			#https://getcomposer.org/doc/articles/autoloader-optimization.md
 			runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --classmap-authoritative --no-dev --no-interaction"
 		else
@@ -207,7 +207,7 @@ fi
 #https://webworxshop.com/my-road-to-docker-sorting-out-smtp/
 #https://www.wpdiaries.com/mail-functionality-for-official-docker-wordpress-image/
 
-if [ "${APP_ENV}" = "production" ]; then
+if [ "${APP_ENV:-production}" = "production" ]; then
 	if [ -n "${PHP_SENDMAIL_PATH:-}" ]; then
 		echo 'sendmail_path="'"${PHP_SENDMAIL_PATH}"'"' >/opt/bitnami/php/etc/conf.d/msmtp.ini
 	else
