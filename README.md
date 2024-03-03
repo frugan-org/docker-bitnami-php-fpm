@@ -4,13 +4,13 @@
 
 Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/containers/tree/main/bitnami/php-fpm) with optional integration of:
 
-- [wait-for-it](https://github.com/vishnubob/wait-for-it)
-- [msmtp](https://marlam.de/msmtp/)
-- [MailHog](https://hub.docker.com/r/mailhog/mailhog/)
 - [Composer](https://getcomposer.org)
-- [WP-CLI](https://wp-cli.org)
+- [Laravel](https://laravel.com) `APP_ENV` environment variable
+- [MailHog](https://hub.docker.com/r/mailhog/mailhog/)
+- [msmtp](https://marlam.de/msmtp/)
 - [New Relic](https://newrelic.com)
-
+- [wait-for-it](https://github.com/vishnubob/wait-for-it)
+- [WP-CLI](https://wp-cli.org)
 
 ### Contributing
 
