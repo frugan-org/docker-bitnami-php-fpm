@@ -11,23 +11,17 @@ Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/c
 - [WP-CLI](https://wp-cli.org)
 - [New Relic](https://newrelic.com)
 
+
+### Contributing
+
+For your contributions please use the [git-flow workflow](https://danielkummer.github.io/git-flow-cheatsheet/) and [conventional commits](https://www.conventionalcommits.org).
+
 ### Changelog
 
 See auto-[CHANGELOG](CHANGELOG.md) file.
 
-### Contributing
-
-For your contributions please use the [git-flow workflow](https://danielkummer.github.io/git-flow-cheatsheet/).
-
 ### Support
 
-<!-- 
-https://www.buymeacoffee.com/brand 
-https://stackoverflow.com/a/26138535/3929620
-https://github.com/nrobinson2000/donate-bitcoin
-https://bitcoin.stackexchange.com/a/48744
-https://github.com/KristinitaTest/KristinitaTest.github.io/blob/master/donate/Bitcoin-Protocol-Markdown.md
--->
 [<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="200" alt="Buy Me A Coffee">](https://buymeacoff.ee/frugan)
 
 ### Usefull links
@@ -47,5 +41,5 @@ https://github.com/KristinitaTest/KristinitaTest.github.io/blob/master/donate/Bi
 
 ### License
 
-(ɔ) Copyleft 2023 [Frugan](https://frugan.it)
+(ɔ) Copyleft 2024 [Frugan](https://frugan.it).  
 [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/), see [COPYING](COPYING) file.
