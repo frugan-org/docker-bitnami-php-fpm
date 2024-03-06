@@ -35,7 +35,7 @@ RUN install_packages \
     ;
 
 
-#### msmtp/mailhog
+#### msmtp
 # Looks like sSMTP is no longer maintained, MSMTP is the suggested replacement.
 
 RUN install_packages \

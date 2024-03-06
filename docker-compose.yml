@@ -6,7 +6,6 @@ services:
       context: .
       args:
         TAG: ${PHP_TAG}
-        MAILHOG_VERSION: ${MAILHOG_VERSION}
         NEWRELIC_VERSION: ${NEWRELIC_VERSION}
         NEWRELIC_LICENSE_KEY: ${NEWRELIC_LICENSE_KEY}
         NEWRELIC_APPLICATION_NAME: ${NEWRELIC_APPLICATION_NAME}
@@ -22,7 +21,6 @@ services:
       PHP_WAITFORIT_CONTAINER_NAME: ${PHP_WAITFORIT_CONTAINER_NAME}
       PHP_WAITFORIT_CONTAINER_PORT: ${PHP_WAITFORIT_CONTAINER_PORT}
       GITHUB_TOKEN: ${GITHUB_TOKEN}
-      MAILHOG_SENDMAIL_VERSION: ${MAILHOG_SENDMAIL_VERSION}
       NEWRELIC_ENABLED: ${NEWRELIC_ENABLED}
       NEWRELIC_VERSION: ${NEWRELIC_VERSION}
       PHP_WITH_ALL_LOCALES: ${PHP_WITH_ALL_LOCALES}
@@ -49,14 +47,19 @@ services:
       PHP_JIT_BUFFER_SIZE: ${PHP_JIT_BUFFER_SIZE}
       PHP_SENDMAIL_PATH: ${PHP_SENDMAIL_PATH}
 
-  mailhog:
-    container_name: ${MAILHOG_NAME}
-    image: mailhog/mailhog:${MAILHOG_TAG:-latest}
+  mailpit:
+    container_name: ${MAILPIT_NAME}
+    image: axllent/mailpit:${MAILPIT_TAG:-latest}
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     ports:
-      - ${MAILHOG_SMTP_PORT}:1025
-      - ${MAILHOG_HTTP_PORT}:8025
+      - ${MAILPIT_HTTP_PORT}:8025
+      - ${MAILPIT_SMTP_PORT}:1025
+    environment:
+      MP_MAX_MESSAGES: ${MAILPIT_MAX_MESSAGES}
+      MP_DATA_FILE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
-      - default
+      - network
