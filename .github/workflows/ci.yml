@@ -16,7 +16,7 @@ jobs:
       # and will result in the following context: https://github.com/<owner>/<repo>.git#<ref>.
       -
         name: Checkout
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.4
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
