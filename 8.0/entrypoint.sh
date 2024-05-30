@@ -99,6 +99,10 @@ if [ "${APP_ENV:-production}" != "production" ]; then
 		echo 'user_ini.filename = ".user-'"${APP_ENV:-production}"'.ini"'
 		echo 'user_ini.cache_ttl = 0'
 	} >>/opt/bitnami/php/etc/php.ini
+else
+	sed -i \
+		-e 's/^expose_php = On/expose_php = Off/' \
+		/opt/bitnami/php/etc/php.ini
 fi
 
 #https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
@@ -191,6 +195,7 @@ if [ -n "${PHP_WP_CLI_ENABLED:-}" ]; then
 fi
 
 #### sendmail, msmtp
+#https://wiki.archlinux.org/title/Msmtp
 #https://github.com/ilyasotkov/docker-php-msmtp
 #https://github.com/crazy-max/docker-msmtpd
 #https://github.com/neiltheblue/ssmtp-wordpress
