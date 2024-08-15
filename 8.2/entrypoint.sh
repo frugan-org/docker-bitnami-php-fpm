@@ -60,7 +60,7 @@ enable_locale() {
 	fi
 }
 
-if [[ "$WITH_ALL_LOCALES" =~ ^(yes|true|1)$ ]]; then
+if [[ "${WITH_ALL_LOCALES,,}" =~ ^(yes|true|1)$ ]]; then
 	echo "Enabling all locales"
 	cp "$SUPPORTED_LOCALES_FILE" "$LOCALES_FILE"
 else
@@ -108,31 +108,31 @@ fi
 #https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
 {
 	# W3TC: memcached, newrelic, pdo_dblib, pdo_pgsql, pgsql, opcache
-	if [ -n "${PHP_APCU_ENABLED:-}" ]; then
+	if [[ "${PHP_APCU_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'extension = apcu' # available (not actived) in bitnami/php-fpm
 	fi
-	if [ -n "${PHP_MCRYPT_ENABLED:-}" ]; then
+	if [[ "${PHP_MCRYPT_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'extension = mcrypt' # available (not actived) in bitnami/php-fpm
 	fi
-	if [ -n "${PHP_IMAGICK_ENABLED:-}" ]; then
+	if [[ "${PHP_IMAGICK_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'extension = imagick' # available (not actived) in bitnami/php-fpm
 	fi
-	if [ -n "${PHP_MAXMINDDB_ENABLED:-}" ]; then
+	if [[ "${PHP_MAXMINDDB_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'extension = maxminddb' # available (not actived) in bitnami/php-fpm
 	fi
-	if [ -n "${PHP_MONGODB_ENABLED:-}" ]; then
+	if [[ "${PHP_MONGODB_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'extension = mongodb' # available (not actived) in bitnami/php-fpm
 	fi
-	if [ -n "${PHP_XDEBUG_ENABLED:-}" ]; then
+	if [[ "${PHP_XDEBUG_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'zend_extension = xdebug' # available (not actived) in bitnami/php-fpm
 	fi
-	if [ -n "${PHP_MEMCACHED_ENABLED:-}" ]; then
+	if [[ "${PHP_MEMCACHED_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'extension = memcached' # available (not actived) in bitnami/php-fpm
 	fi
-	if [ -n "${PHP_PDO_DBLIB_ENABLED:-}" ]; then
+	if [[ "${PHP_PDO_DBLIB_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 		echo 'extension = pdo_dblib' # available (not actived) in bitnami/php-fpm
 	fi
-	#if [ -n "${PHP_OPCACHE_ENABLED:-}" ]; then
+	#if [[ "${PHP_OPCACHE_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 	#  echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
 	#fi
 
@@ -189,7 +189,7 @@ done
 #https://wp-cli.org/it/#installazione
 #https://github.com/tatemz/docker-wpcli/blob/master/Dockerfile
 
-if [ -n "${PHP_WP_CLI_ENABLED:-}" ]; then
+if [[ "${PHP_WP_CLI_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 	curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 	chmod +x /usr/local/bin/wp
 fi
@@ -210,11 +210,18 @@ else
 	echo 'sendmail_path="/usr/bin/msmtp -t"' >/opt/bitnami/php/etc/conf.d/msmtp.ini
 fi
 
+#### supercronic
+#https://github.com/aptible/supercronic
+
+if [[ "${PHP_SUPERCRONIC_ENABLED,,}" =~ ^(yes|true|1)$ && -f "/etc/crontab" ]]; then
+	/usr/local/bin/supercronic /etc/crontab &
+fi
+
 #### newrelic
 #https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/install-php-agent-docker
 #https://stackoverflow.com/a/584926/3929620
 
-if [ -n "${PHP_NEWRELIC_ENABLED:-}" ]; then
+if [[ "${PHP_NEWRELIC_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 	#https://stackoverflow.com/a/53935189/3929620
 	#https://superuser.com/a/442395
 	#https://curl.haxx.se/mail/archive-2018-02/0027.html
