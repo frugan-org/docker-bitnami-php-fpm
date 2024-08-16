@@ -214,7 +214,7 @@ fi
 #https://github.com/aptible/supercronic
 
 if [[ "${PHP_SUPERCRONIC_ENABLED,,}" =~ ^(yes|true|1)$ && -f "/etc/crontab" ]]; then
-	/usr/local/bin/supercronic /etc/crontab &
+	/usr/local/bin/supercronic "${PHP_SUPERCRONIC_FLAGS:-}" /etc/crontab &
 fi
 
 #### newrelic
