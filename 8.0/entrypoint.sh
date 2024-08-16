@@ -204,6 +204,11 @@ fi
 #https://www.wpdiaries.com/mail-functionality-for-official-docker-wordpress-image/
 #https://github.com/swiftmailer/swiftmailer/issues/633
 
+#https://github.com/netdata/netdata/issues/7572
+if [ -f "/home/daemon/.msmtprc" ]; then
+	ln -sfn /home/daemon/.msmtprc /etc/msmtprc
+fi
+
 if [ -n "${PHP_SENDMAIL_PATH:-}" ]; then
 	echo 'sendmail_path="'"${PHP_SENDMAIL_PATH}"'"' >/opt/bitnami/php/etc/conf.d/sendmail.ini
 else
