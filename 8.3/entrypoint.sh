@@ -142,6 +142,23 @@ fi
 	fi
 } | tee -a /opt/bitnami/php/etc/php.ini
 
+#https://www.baeldung.com/linux/imagemagick-security-policy
+#https://askubuntu.com/a/1127265/543855
+#https://stackoverflow.com/a/53180170/3929620
+if [[ "${PHP_IMAGICK_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if [[ -n "${PHP_IMAGICK_POLICY_RULES:-}" ]]; then
+		policy_file=$(find /etc/ -type f -name "policy.xml" | grep -E "ImageMagick-[0-9]+/policy.xml")
+		if [[ -n "${policy_file}" ]]; then
+			# `sed -i "/pattern/i text" file` (add `text` before `pattern` in `file`)
+			# `sed -i "/pattern/a text" file` (add `text` after `pattern` in `file`)
+			# `-i` stands for in-place editing of the file
+			# `${VAR//pattern/replacement}` is bash syntax for replacing all occurrences of `pattern` with `replacement` in `VAR`
+			# `$'\n'` represents a new line in bash
+			sed -i "/<\/policymap>/i ${PHP_IMAGICK_POLICY_RULES//$'\n'/\\n}" "${policy_file}"
+		fi
+	fi
+fi
+
 #### composer
 #https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/
 #https://stackoverflow.com/a/43878779/3929620

@@ -6,9 +6,6 @@ services:
       context: .
       args:
         TAG: ${PHP_TAG}
-        NEWRELIC_VERSION: ${NEWRELIC_VERSION}
-        NEWRELIC_LICENSE_KEY: ${NEWRELIC_LICENSE_KEY}
-        NEWRELIC_APPLICATION_NAME: ${NEWRELIC_APPLICATION_NAME}
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -36,6 +33,7 @@ services:
       PHP_APCU_ENABLED: ${PHP_APCU_ENABLED}
       PHP_MCRYPT_ENABLED: ${PHP_MCRYPT_ENABLED}
       PHP_IMAGICK_ENABLED: ${PHP_IMAGICK_ENABLED}
+      PHP_IMAGICK_POLICY_RULES: ${PHP_IMAGICK_POLICY_RULES}
       PHP_MAXMINDDB_ENABLED: ${PHP_MAXMINDDB_ENABLED}
       PHP_MONGODB_ENABLED: ${PHP_MONGODB_ENABLED}
       PHP_XDEBUG_ENABLED: ${PHP_XDEBUG_ENABLED}
@@ -61,7 +59,6 @@ services:
       - ${MAILPIT_SMTP_PORT}:1025
     environment:
       MP_MAX_MESSAGES: ${MAILPIT_MAX_MESSAGES}
-      MP_DATA_FILE: /data/mailpit.db
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
