@@ -237,7 +237,7 @@ fi
 
 if [[ "${PHP_SUPERCRONIC_ENABLED,,}" =~ ^(yes|true|1)$ && -f "/etc/crontab" ]]; then
 	# shellcheck disable=SC2086
-	runuser -l daemon -c "/usr/local/bin/supercronic ${PHP_SUPERCRONIC_FLAGS:-} /etc/crontab" &
+	runuser -l daemon -c "PATH=${PATH}; /usr/local/bin/supercronic ${PHP_SUPERCRONIC_FLAGS:-} /etc/crontab" &
 fi
 
 #### newrelic
