@@ -135,6 +135,9 @@ fi
 	#if [[ "${PHP_OPCACHE_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
 	#  echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
 	#fi
+	if [[ "${PHP_SODIUM_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+		echo 'extension = sodium' # available (not actived) in bitnami/php-fpm
+	fi
 
 	#https://php.watch/articles/jit-in-depth
 	if [ -n "${PHP_JIT_BUFFER_SIZE:-}" ]; then
