@@ -12,6 +12,7 @@ Customization of the [Bitnami PHP-FPM Docker image](https://github.com/bitnami/c
 - [MailPit](https://hub.docker.com/r/axllent/mailpit)
 - [msmtp](https://marlam.de/msmtp/)
 - [New Relic](https://newrelic.com)
+- [Redis](https://pecl.php.net/package/redis)
 - [Supercronic](https://github.com/aptible/supercronic)
 - [wait-for-it](https://github.com/vishnubob/wait-for-it)
 - [WP-CLI](https://wp-cli.org)
@@ -37,5 +38,5 @@ For your contributions please use:
 
 ## License
 
-(ɔ) Copyleft 2024 [Frugan](https://frugan.it).  
+(ɔ) Copyleft 2025 [Frugan](https://frugan.it).  
 [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/), see [LICENSE](LICENSE) file.

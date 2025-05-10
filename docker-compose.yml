@@ -3,7 +3,7 @@ services:
   php:
     container_name: ${PHP_NAME}
     build:
-      context: .
+      context: ./${PHP_TAG}
       args:
         TAG: ${PHP_TAG}
     restart: unless-stopped
@@ -43,6 +43,9 @@ services:
       PHP_PGSQL_ENABLED: ${PHP_PGSQL_ENABLED}
       PHP_OPCACHE_ENABLED: ${PHP_OPCACHE_ENABLED}
       PHP_SODIUM_ENABLED: ${PHP_SODIUM_ENABLED}
+      PHP_REDIS_ENABLED: ${PHP_REDIS_ENABLED}
+      PHP_IGBINARY_ENABLED: ${PHP_IGBINARY_ENABLED}
+      PHP_MSGPACK_ENABLED: ${PHP_MSGPACK_ENABLED}
       PHP_SUPERCRONIC_ENABLED: ${PHP_SUPERCRONIC_ENABLED}
       PHP_SUPERCRONIC_FLAGS: ${PHP_SUPERCRONIC_FLAGS}
       SENTRY_DSN: ${PHP_SENTRY_DSN}

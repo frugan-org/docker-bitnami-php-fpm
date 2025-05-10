@@ -1,10 +1,45 @@
 #!/bin/bash
 
-set -e
-#set -o errexit
-#set -o nounset
-#set -o pipefail
-#set -o xtrace # Uncomment this line for debugging purpose
+# Bash Strict Mode:
+# -e  / -o errexit    :: Exit immediately if a command exits with a non-zero status.
+# -E  / -o errtrace   :: Inherit ERR trap in functions, subshells, and substitutions (older shells may require -o errtrace instead of -E).
+# -u  / -o nounset    :: Treat unset variables as an error and exit immediately.
+# -o pipefail         :: Exit on error in pipeline.
+# -x  / -o xtrace     :: Print each command and its arguments as they are executed (useful for debugging).
+# -T  / -o functrace  :: Allow function tracing (used for DEBUG and RETURN traps within functions and sourced files).
+#
+# Optional:
+# shopt -s inherit_errexit  :: Bash >= 4.4: ensures ERR trap inheritance in all cases
+#
+# Common practice:
+# set -eEuo pipefail  # Strict mode (recommended)
+set -eEuo pipefail
+
+# Helper function to check if variable is enabled
+is_enabled() {
+	local var="${1}"
+	[[ "${var,,}" =~ ^(yes|true|1)$ ]]
+}
+
+# Helper function to check if variable is disabled
+is_disabled() {
+	local var="${1}"
+	[[ -z "${var}" || "${var,,}" =~ ^(no|false|0)$ ]]
+}
+
+# Helper function for enabling locale only when it was not added before
+enable_locale() {
+	local -r locale="${1:?missing locale}"
+	if ! grep -q -E "^${locale}$" "$SUPPORTED_LOCALES_FILE"; then
+		echo "Locale ${locale} is not supported in this system"
+		return 1
+	fi
+	if ! grep -q -E "^${locale}" "$LOCALES_FILE"; then
+		echo "$locale" >>"$LOCALES_FILE"
+	else
+		echo "Locale ${locale} is already enabled"
+	fi
+}
 
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
 if [ "${USER_ID:-0}" -ne 0 ] && [ "${GROUP_ID:-0}" -ne 0 ]; then
@@ -46,21 +81,7 @@ EXTRA_LOCALES="${PHP_EXTRA_LOCALES:-}"
 LOCALES_FILE="/etc/locale.gen"
 SUPPORTED_LOCALES_FILE="/usr/share/i18n/SUPPORTED"
 
-# Helper function for enabling locale only when it was not added before
-enable_locale() {
-	local -r locale="${1:?missing locale}"
-	if ! grep -q -E "^${locale}$" "$SUPPORTED_LOCALES_FILE"; then
-		echo "Locale ${locale} is not supported in this system"
-		return 1
-	fi
-	if ! grep -q -E "^${locale}" "$LOCALES_FILE"; then
-		echo "$locale" >>"$LOCALES_FILE"
-	else
-		echo "Locale ${locale} is already enabled"
-	fi
-}
-
-if [[ "${WITH_ALL_LOCALES,,}" =~ ^(yes|true|1)$ ]]; then
+if is_enabled "${WITH_ALL_LOCALES:-}"; then
 	echo "Enabling all locales"
 	cp "$SUPPORTED_LOCALES_FILE" "$LOCALES_FILE"
 else
@@ -108,34 +129,34 @@ fi
 #https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
 {
 	# W3TC: memcached, newrelic, pdo_dblib, pdo_pgsql, pgsql, opcache
-	if [[ "${PHP_APCU_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_APCU_ENABLED:-}"; then
 		echo 'extension = apcu' # available (not actived) in bitnami/php-fpm
 	fi
-	if [[ "${PHP_MCRYPT_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_MCRYPT_ENABLED:-}"; then
 		echo 'extension = mcrypt' # available (not actived) in bitnami/php-fpm
 	fi
-	if [[ "${PHP_IMAGICK_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_IMAGICK_ENABLED:-}"; then
 		echo 'extension = imagick' # available (not actived) in bitnami/php-fpm
 	fi
-	if [[ "${PHP_MAXMINDDB_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_MAXMINDDB_ENABLED:-}"; then
 		echo 'extension = maxminddb' # available (not actived) in bitnami/php-fpm
 	fi
-	if [[ "${PHP_MONGODB_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_MONGODB_ENABLED:-}"; then
 		echo 'extension = mongodb' # available (not actived) in bitnami/php-fpm
 	fi
-	if [[ "${PHP_XDEBUG_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_XDEBUG_ENABLED:-}"; then
 		echo 'zend_extension = xdebug' # available (not actived) in bitnami/php-fpm
 	fi
-	if [[ "${PHP_MEMCACHED_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_MEMCACHED_ENABLED:-}"; then
 		echo 'extension = memcached' # available (not actived) in bitnami/php-fpm
 	fi
-	if [[ "${PHP_PDO_DBLIB_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_PDO_DBLIB_ENABLED:-}"; then
 		echo 'extension = pdo_dblib' # available (not actived) in bitnami/php-fpm
 	fi
-	#if [[ "${PHP_OPCACHE_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	#if is_enabled "${PHP_OPCACHE_ENABLED:-}"; then
 	#  echo 'zend_extension = opcache'; # available (actived) in bitnami/php-fpm
 	#fi
-	if [[ "${PHP_SODIUM_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+	if is_enabled "${PHP_SODIUM_ENABLED:-}"; then
 		echo 'extension = sodium' # available (not actived) in bitnami/php-fpm
 	fi
 
@@ -143,12 +164,22 @@ fi
 	if [ -n "${PHP_JIT_BUFFER_SIZE:-}" ]; then
 		echo "opcache.jit_buffer_size = ${PHP_JIT_BUFFER_SIZE:-0}" # not available in bitnami/php-fpm
 	fi
+
+	if is_enabled "${PHP_REDIS_ENABLED:-}"; then
+		echo 'extension = redis'
+	fi
+	if is_enabled "${PHP_IGBINARY_ENABLED:-}"; then
+		echo 'extension = igbinary'
+	fi
+	if is_enabled "${PHP_MSGPACK_ENABLED:-}"; then
+		echo 'extension = msgpack'
+	fi
 } | tee -a /opt/bitnami/php/etc/php.ini
 
 #https://www.baeldung.com/linux/imagemagick-security-policy
 #https://askubuntu.com/a/1127265/543855
 #https://stackoverflow.com/a/53180170/3929620
-if [[ "${PHP_IMAGICK_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+if is_enabled "${PHP_IMAGICK_ENABLED:-}"; then
 	if [[ -n "${PHP_IMAGICK_POLICY_RULES:-}" ]]; then
 		policy_file=$(find /etc/ -type f -name "policy.xml" | grep -E "ImageMagick-[0-9]+/policy.xml")
 		if [[ -n "${policy_file}" ]]; then
@@ -166,7 +197,6 @@ fi
 #https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/
 #https://stackoverflow.com/a/43878779/3929620
 #https://bugzilla.redhat.com/show_bug.cgi?id=1245780
-
 if [ -n "${PHP_COMPOSER_VERSION:-}" ]; then
 	curl -sS https://getcomposer.org/installer | php -- \
 		--install-dir=/usr/local/bin \
@@ -187,29 +217,29 @@ if [ -n "${PHP_COMPOSER_ARG:-}" ]; then
 	composer self-update "${PHP_COMPOSER_ARG}"
 fi
 
-IFS=',' read -ra libs <<<"${PHP_COMPOSER_GLOBAL_LIBS}"
-for lib in "${libs[@]}"; do
-	runuser -l daemon -c "PATH=$PATH; composer global require ${lib}"
-done
+if [[ -n "${PHP_COMPOSER_GLOBAL_LIBS}" ]]; then
+	runuser -l daemon -c "PATH=$PATH; composer global require ${PHP_COMPOSER_GLOBAL_LIBS//,/ }"
+fi
 
 IFS=',' read -ra paths <<<"${PHP_COMPOSER_PATHS}"
 for path in "${paths[@]}"; do
-	if [ "${APP_ENV:-production}" = "production" ]; then
-		#https://getcomposer.org/doc/articles/autoloader-optimization.md
-		runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --classmap-authoritative --no-dev --no-interaction"
-	else
-		#https://github.com/composer/composer/issues/4892#issuecomment-328511850
-		#composer clear-cache;
-		runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --no-interaction"
-		runuser -l daemon -c "PATH=$PATH; cd ${path}; composer validate --no-check-all" # --strict
+	if [[ -d "${path}" ]]; then
+		if [ "${APP_ENV:-production}" = "production" ]; then
+			#https://getcomposer.org/doc/articles/autoloader-optimization.md
+			runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --classmap-authoritative --no-dev --no-interaction"
+		else
+			#https://github.com/composer/composer/issues/4892#issuecomment-328511850
+			#composer clear-cache;
+			runuser -l daemon -c "PATH=$PATH; cd ${path}; composer update --optimize-autoloader --no-interaction"
+			runuser -l daemon -c "PATH=$PATH; cd ${path}; composer validate --no-check-all" # --strict
+		fi
 	fi
 done
 
 #### wp-cli
 #https://wp-cli.org/it/#installazione
 #https://github.com/tatemz/docker-wpcli/blob/master/Dockerfile
-
-if [[ "${PHP_WP_CLI_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+if is_enabled "${PHP_WP_CLI_ENABLED:-}"; then
 	curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 	chmod +x /usr/local/bin/wp
 fi
@@ -237,8 +267,7 @@ fi
 
 #### supercronic
 #https://github.com/aptible/supercronic
-
-if [[ "${PHP_SUPERCRONIC_ENABLED,,}" =~ ^(yes|true|1)$ && -f "/etc/crontab" ]]; then
+if is_enabled "${PHP_SUPERCRONIC_ENABLED:-}" && [[ -f "/etc/crontab" ]]; then
 	# shellcheck disable=SC2086
 	runuser -l daemon -c "PATH=${PATH}; /usr/local/bin/supercronic ${PHP_SUPERCRONIC_FLAGS:-} /etc/crontab" &
 fi
@@ -246,8 +275,7 @@ fi
 #### newrelic
 #https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/install-php-agent-docker
 #https://stackoverflow.com/a/584926/3929620
-
-if [[ "${PHP_NEWRELIC_ENABLED,,}" =~ ^(yes|true|1)$ ]]; then
+if is_enabled "${PHP_NEWRELIC_ENABLED:-}"; then
 	#https://stackoverflow.com/a/53935189/3929620
 	#https://superuser.com/a/442395
 	#https://curl.haxx.se/mail/archive-2018-02/0027.html
