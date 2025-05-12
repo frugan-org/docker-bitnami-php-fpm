@@ -167,12 +167,15 @@ fi
 
 	if is_enabled "${PHP_REDIS_ENABLED:-}"; then
 		echo 'extension = redis'
-	fi
-	if is_enabled "${PHP_IGBINARY_ENABLED:-}"; then
 		echo 'extension = igbinary'
-	fi
-	if is_enabled "${PHP_MSGPACK_ENABLED:-}"; then
 		echo 'extension = msgpack'
+	elif is_enabled "${PHP_IGBINARY_ENABLED:-}" || is_enabled "${PHP_MSGPACK_ENABLED:-}"; then
+		if is_enabled "${PHP_IGBINARY_ENABLED:-}"; then
+			echo 'extension = igbinary'
+		fi
+		if is_enabled "${PHP_MSGPACK_ENABLED:-}"; then
+			echo 'extension = msgpack'
+		fi
 	fi
 } | tee -a /opt/bitnami/php/etc/php.ini
 
