@@ -31,8 +31,19 @@ is_disabled() {
 add_env_var() {
 	local var_name="$1"
 	local default_value="${2:-}"
+	local allow_empty="${3:-false}"
+
 	local current_value="${!var_name:-$default_value}"
-	echo "env[${var_name}] = ${current_value}"
+
+	# Handles empty values
+	if [[ -n "$current_value" ]]; then
+		echo "env[${var_name}] = ${current_value}"
+	elif [[ "$allow_empty" == "true" ]]; then
+		# Force an empty value with quotes
+		echo "env[${var_name}] = \"\""
+	else
+		echo "# SKIPPED: env[${var_name}] (empty value)"
+	fi
 }
 
 # Helper function for enabling locale only when it was not added before
@@ -143,9 +154,13 @@ locale-gen
 					# If empty, use environment variable
 					add_env_var "$key"
 				else
-					# Expand variables in value
+					# Expand variables in value and write directly
 					expanded_value="$(eval echo "$value")"
-					echo "env[${key}] = ${expanded_value}"
+					if [[ -n "$expanded_value" ]]; then
+						echo "env[${key}] = ${expanded_value}"
+					else
+						echo "# SKIPPED: env[${key}] (empty expanded value)"
+					fi
 				fi
 			fi
 		done <"${CUSTOM_ENV_FILE}"
