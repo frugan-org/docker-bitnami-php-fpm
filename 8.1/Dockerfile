@@ -64,6 +64,12 @@ RUN install_packages \
         # Looks like sSMTP is no longer maintained, MSMTP is the suggested replacement
         msmtp \
         \
+        # libvips and dependencies for image processing
+        libvips-dev \
+        libvips-tools \
+        libvips42 \
+        libffi-dev \
+        \
         # supercronic
         tzdata \
         && curl -fsSLO "$SUPERCRONIC_URL" \

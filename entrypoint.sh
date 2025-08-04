@@ -27,6 +27,14 @@ is_disabled() {
 	[[ -z "${var}" || "${var,,}" =~ ^(no|false|0)$ ]]
 }
 
+# Helper function to add environment variables
+add_env_var() {
+	local var_name="$1"
+	local default_value="${2:-}"
+	local current_value="${!var_name:-$default_value}"
+	echo "env[${var_name}] = ${current_value}"
+}
+
 # Helper function for enabling locale only when it was not added before
 enable_locale() {
 	local -r locale="${1:?missing locale}"
@@ -98,8 +106,9 @@ locale-gen
 {
 	echo ''
 
+	# === MANDATORY VARIABLES ===
 	#DEPRECATED
-	echo 'env[ENV] = '"${ENV:-production}"
+	add_env_var "ENV" "production"
 
 	#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
 	#https://stackoverflow.com/a/58067682
@@ -107,7 +116,40 @@ locale-gen
 	#https://wordpress.stackexchange.com/a/286098/99214
 	#https://laravel.com/docs/10.x/configuration
 	#https://medium.com/@tomahock/passing-system-environment-variables-to-php-fpm-when-using-nginx-a70045370fad
-	echo 'env[APP_ENV] = '"${APP_ENV:-production}"
+	add_env_var "APP_ENV" "production"
+
+	# === CUSTOM VARIABLES VIA LIST ===
+	# Example: PHP_CUSTOM_ENV_VARS="GITHUB_TOKEN,SENTRY_DSN,NEWRELIC_ENABLED"
+	if [[ -n "${PHP_CUSTOM_ENV_VARS:-}" ]]; then
+		echo "# Custom environment variables from PHP_CUSTOM_ENV_VARS"
+		IFS=',' read -ra custom_vars <<<"${PHP_CUSTOM_ENV_VARS}"
+		for var_name in "${custom_vars[@]}"; do
+			var_name="$(echo -e "${var_name}" | tr -d '[:space:]')"
+			[[ -n "$var_name" ]] && add_env_var "$var_name"
+		done
+	fi
+
+	# === CUSTOM VARIABLES VIA FILE ===
+	CUSTOM_ENV_FILE="${PHP_CUSTOM_ENV_FILE:-/php-env.conf}"
+	if [[ -f "${CUSTOM_ENV_FILE}" ]]; then
+		echo "# Custom environment variables from ${CUSTOM_ENV_FILE}"
+		while IFS='=' read -r key value || [[ -n "$key" ]]; do
+			# Skip blank lines and comments
+			[[ -z "$key" || "$key" =~ ^[[:space:]]*# ]] && continue
+
+			key="$(echo -e "${key}" | tr -d '[:space:]')"
+			if [[ -n "$key" ]]; then
+				if [[ -z "$value" ]]; then
+					# If empty, use environment variable
+					add_env_var "$key"
+				else
+					# Expand variables in value
+					expanded_value="$(eval echo "$value")"
+					echo "env[${key}] = ${expanded_value}"
+				fi
+			fi
+		done <"${CUSTOM_ENV_FILE}"
+	fi
 
 	#https://mattallan.me/posts/how-php-environment-variables-actually-work/
 	#https://github.com/docker-library/php/issues/74
@@ -217,7 +259,7 @@ fi
 #https://blog.martinhujer.cz/17-tips-for-using-composer-efficiently/
 #https://github.com/composer/composer/issues/8913
 if [ -n "${PHP_COMPOSER_ARG:-}" ]; then
-	composer self-update "${PHP_COMPOSER_ARG}"
+	runuser -l daemon -c "PATH=$PATH; composer self-update ${PHP_COMPOSER_ARG}"
 fi
 
 if [[ -n "${PHP_COMPOSER_GLOBAL_LIBS}" ]]; then
