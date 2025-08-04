@@ -33,7 +33,20 @@ add_env_var() {
 	local default_value="${2:-}"
 	local allow_empty="${3:-false}"
 
-	local current_value="${!var_name:-$default_value}"
+	# Handles strict mode (-u) for indirect expansion
+	local current_value
+	if [[ -v "$var_name" ]]; then
+		# Variable is defined, use indirect expansion
+		current_value="${!var_name}"
+	else
+		# Undefined variable, use default
+		current_value="$default_value"
+	fi
+
+	# If still empty after checking, use default
+	if [[ -z "$current_value" && -n "$default_value" ]]; then
+		current_value="$default_value"
+	fi
 
 	# Handles empty values
 	if [[ -n "$current_value" ]]; then
@@ -42,7 +55,7 @@ add_env_var() {
 		# Force an empty value with quotes
 		echo "env[${var_name}] = \"\""
 	else
-		echo "# SKIPPED: env[${var_name}] (empty value)"
+		echo "; SKIPPED: env[${var_name}] (empty value)"
 	fi
 }
 
@@ -132,7 +145,7 @@ locale-gen
 	# === CUSTOM VARIABLES VIA LIST ===
 	# Example: PHP_CUSTOM_ENV_VARS="GITHUB_TOKEN,SENTRY_DSN,NEWRELIC_ENABLED"
 	if [[ -n "${PHP_CUSTOM_ENV_VARS:-}" ]]; then
-		echo "# Custom environment variables from PHP_CUSTOM_ENV_VARS"
+		echo "; Custom environment variables from PHP_CUSTOM_ENV_VARS"
 		IFS=',' read -ra custom_vars <<<"${PHP_CUSTOM_ENV_VARS}"
 		for var_name in "${custom_vars[@]}"; do
 			var_name="$(echo -e "${var_name}" | tr -d '[:space:]')"
@@ -159,7 +172,7 @@ locale-gen
 					if [[ -n "$expanded_value" ]]; then
 						echo "env[${key}] = ${expanded_value}"
 					else
-						echo "# SKIPPED: env[${key}] (empty expanded value)"
+						echo "; SKIPPED: env[${key}] (empty expanded value)"
 					fi
 				fi
 			fi
