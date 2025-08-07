@@ -135,6 +135,8 @@ locale-gen
 	echo ''
 
 	# === MANDATORY VARIABLES ===
+	echo "; Mandatory custom environment variables"
+
 	#DEPRECATED
 	add_env_var "ENV" "production"
 
@@ -160,7 +162,7 @@ locale-gen
 	# === CUSTOM VARIABLES VIA FILE ===
 	CUSTOM_ENV_FILE="${PHP_CUSTOM_ENV_FILE:-/php-env.conf}"
 	if [[ -f "${CUSTOM_ENV_FILE}" ]]; then
-		echo "# Custom environment variables from ${CUSTOM_ENV_FILE}"
+		echo "; Custom environment variables from ${CUSTOM_ENV_FILE}"
 		while IFS='=' read -r key value || [[ -n "$key" ]]; do
 			# Skip blank lines and comments
 			[[ -z "$key" || "$key" =~ ^[[:space:]]*# ]] && continue
@@ -188,10 +190,6 @@ locale-gen
 	#https://stackoverflow.com/a/58067682/3929620
 	#echo 'clear_env = no';
 } >>/opt/bitnami/php/etc/environment.conf
-
-sed -i \
-	-e 's/^variables_order = .*/variables_order = "EGPCS"/' \
-	/opt/bitnami/php/etc/php.ini
 
 if [ "${APP_ENV:-production}" != "production" ]; then
 	{
