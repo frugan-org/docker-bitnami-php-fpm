@@ -27,7 +27,9 @@ is_disabled() {
 	[[ -z "${var}" || "${var,,}" =~ ^(no|false|0)$ ]]
 }
 
-# Helper function to add environment variables
+# Helper function to add environment variables.
+# All environment variables received by PHP are strings;
+# type casting could be handled manually w/ Env libraries (e.g. oscarotero/env).
 add_env_var() {
 	local var_name="$1"
 	local default_value="${2:-}"
@@ -50,7 +52,9 @@ add_env_var() {
 
 	# Handles empty values
 	if [[ -n "$current_value" ]]; then
-		echo "env[${var_name}] = ${current_value}"
+		# Escape double quotes within the value
+		escaped_value="${current_value//\"/\\\"}"
+		echo "env[${var_name}] = \"${escaped_value}\""
 	elif [[ "$allow_empty" == "true" ]]; then
 		# Force an empty value with quotes
 		echo "env[${var_name}] = \"\""
@@ -184,6 +188,10 @@ locale-gen
 	#https://stackoverflow.com/a/58067682/3929620
 	#echo 'clear_env = no';
 } >>/opt/bitnami/php/etc/environment.conf
+
+sed -i \
+	-e 's/^variables_order = .*/variables_order = "EGPCS"/' \
+	/opt/bitnami/php/etc/php.ini
 
 if [ "${APP_ENV:-production}" != "production" ]; then
 	{
