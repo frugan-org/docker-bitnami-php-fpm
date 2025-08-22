@@ -15,6 +15,7 @@
 # set -eEuo pipefail  # Strict mode (recommended)
 set -eEuo pipefail
 
+# === HELPER FUNCTIONS ===
 # Helper function to check if variable is enabled
 is_enabled() {
 	local var="${1}"
@@ -77,6 +78,7 @@ enable_locale() {
 	fi
 }
 
+# === USER AND GROUP SETUP ===
 #https://jtreminio.com/blog/running-docker-containers-as-current-host-user/#ok-so-what-actually-works
 if [ "${USER_ID:-0}" -ne 0 ] && [ "${GROUP_ID:-0}" -ne 0 ]; then
 	userdel -f daemon
@@ -94,6 +96,7 @@ if [ "${USER_ID:-0}" -ne 0 ] && [ "${GROUP_ID:-0}" -ne 0 ]; then
 	#;
 fi
 
+# === CONTAINER STARTUP DEPENDENCIES ===
 #https://docs.docker.com/compose/startup-order/
 if [ -n "${PHP_WAITFORIT_CONTAINER_NAME:-}" ] && [ -n "${PHP_WAITFORIT_CONTAINER_PORT:-}" ]; then
 	#https://git.eeqj.de/external/mailinabox/commit/1d6793d12434a407d47efa7dc276f63227ad29e5
@@ -106,6 +109,7 @@ if [ -n "${PHP_WAITFORIT_CONTAINER_NAME:-}" ] && [ -n "${PHP_WAITFORIT_CONTAINER
 	fi
 fi
 
+# === LOCALE CONFIGURATION ===
 #https://github.com/bitnami/bitnami-docker-moodle/pull/123
 #https://github.com/bitnami/bitnami-docker-moodle/blob/master/3/debian-10/rootfs/opt/bitnami/scripts/locales/add-extra-locales.sh
 #https://github.com/bitnami/bitnami-docker-moodle#installing-additional-language-packs
@@ -131,8 +135,38 @@ fi
 
 locale-gen
 
+# === GLOBAL PHP-FPM CONFIGURATION ===
+# Redirects php-fpm logs to the container's stderr instead of writing them to `/opt/bitnami/php/logs/php-fpm.log`
+sed -i 's|^error_log.*|error_log = /dev/stderr|g' /opt/bitnami/php/etc/php-fpm.conf
+
+if [ "${APP_ENV:-production}" != "production" ]; then
+	# default `warning`
+	sed -i 's|^log_level.*|log_level = notice|g' /opt/bitnami/php/etc/php-fpm.conf
+fi
+
+# === POOL CONFIGURATION ===
 {
-	echo ''
+	echo ""
+
+	echo "; Custom logging configuration"
+
+	# Redirects worker stdout and stderr into the main FPM error log.
+	# If disabled, stdout and stderr are discarded (redirected to /dev/null, as per FastCGI specs).
+	# Note: This mainly matters for output occurring AFTER fastcgi_finish_request(), since normal
+	# page output before that point is already sent to the client as part of the HTTP response.
+	# Many modern PHP frameworks call fastcgi_finish_request() automatically to improve response times.
+	# Without this setting enabled, any error messages or output generated after the client connection
+	# closes would be lost.
+	#https://stackoverflow.com/a/66695437/3929620
+	echo "catch_workers_output = yes" # available (not actived) in bitnami/php-fpm
+
+	#https://github.com/php/php-src/issues/10671
+	#echo "decorate_workers_output = no" # available (not actived) in bitnami/php-fpm
+} >>/opt/bitnami/php/etc/common.conf
+
+# === ENVIRONMENT CONFIGURATION ===
+{
+	echo ""
 
 	# === MANDATORY VARIABLES ===
 	echo "; Mandatory custom environment variables"
@@ -191,6 +225,7 @@ locale-gen
 	#echo 'clear_env = no';
 } >>/opt/bitnami/php/etc/environment.conf
 
+# === PHP.INI CONFIGURATION ===
 if [ "${APP_ENV:-production}" != "production" ]; then
 	{
 		echo 'user_ini.filename = ".user-'"${APP_ENV:-production}"'.ini"'
@@ -255,6 +290,7 @@ fi
 	fi
 } | tee -a /opt/bitnami/php/etc/php.ini
 
+# === IMAGEMAGICK CONFIGURATION ===
 #https://www.baeldung.com/linux/imagemagick-security-policy
 #https://askubuntu.com/a/1127265/543855
 #https://stackoverflow.com/a/53180170/3929620
@@ -272,7 +308,7 @@ if is_enabled "${PHP_IMAGICK_ENABLED:-}"; then
 	fi
 fi
 
-#### composer
+# === COMPOSER CONFIGURATION ===
 #https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/
 #https://stackoverflow.com/a/43878779/3929620
 #https://bugzilla.redhat.com/show_bug.cgi?id=1245780
@@ -315,7 +351,7 @@ for path in "${paths[@]}"; do
 	fi
 done
 
-#### wp-cli
+# === WP-CLI CONFIGURATION ===
 #https://wp-cli.org/it/#installazione
 #https://github.com/tatemz/docker-wpcli/blob/master/Dockerfile
 if is_enabled "${PHP_WP_CLI_ENABLED:-}"; then
@@ -323,7 +359,7 @@ if is_enabled "${PHP_WP_CLI_ENABLED:-}"; then
 	chmod +x /usr/local/bin/wp
 fi
 
-#### sendmail, msmtp
+# === SENDMAIL AND MSMTP CONFIGURATION ===
 #https://wiki.archlinux.org/title/Msmtp
 #https://github.com/ilyasotkov/docker-php-msmtp
 #https://github.com/crazy-max/docker-msmtpd
@@ -344,14 +380,14 @@ else
 	echo 'sendmail_path="/usr/bin/msmtp -t"' >/opt/bitnami/php/etc/conf.d/msmtp.ini
 fi
 
-#### supercronic
+# === SUPERCRONIC CONFIGURATION ===
 #https://github.com/aptible/supercronic
 if is_enabled "${PHP_SUPERCRONIC_ENABLED:-}" && [[ -f "/etc/crontab" ]]; then
 	# shellcheck disable=SC2086
 	runuser -l daemon -c "PATH=${PATH}; /usr/local/bin/supercronic ${PHP_SUPERCRONIC_FLAGS:-} /etc/crontab" &
 fi
 
-#### newrelic
+# === NEWRELIC CONFIGURATION ===
 #https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/install-php-agent-docker
 #https://stackoverflow.com/a/584926/3929620
 if is_enabled "${PHP_NEWRELIC_ENABLED:-}"; then
@@ -378,8 +414,7 @@ if is_enabled "${PHP_NEWRELIC_ENABLED:-}"; then
 	fi
 fi
 
-####
-
+# === CUSTOM ENTRYPOINT EXECUTION ===
 FILE=/entrypoint-after.sh
 # shellcheck source=/dev/null
 if [ -f "$FILE" ]; then
