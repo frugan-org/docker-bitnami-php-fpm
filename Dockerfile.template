@@ -1,4 +1,4 @@
-FROM bitnami/php-fpm:%%TAG%% as builder
+FROM frugan/bitnamilegacy-php-fpm:%%TAG%% as builder
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -20,7 +20,7 @@ RUN install_packages \
         && rm -rf /tmp/pear \
     ;
 
-FROM bitnami/php-fpm:%%TAG%%
+FROM frugan/bitnamilegacy-php-fpm:%%TAG%%
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

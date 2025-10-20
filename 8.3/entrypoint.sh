@@ -332,11 +332,11 @@ if [ -n "${PHP_COMPOSER_ARG:-}" ]; then
 	runuser -l daemon -c "PATH=$PATH; composer self-update ${PHP_COMPOSER_ARG}"
 fi
 
-if [[ -n "${PHP_COMPOSER_GLOBAL_LIBS}" ]]; then
+if [ -n "${PHP_COMPOSER_GLOBAL_LIBS:-}" ]; then
 	runuser -l daemon -c "PATH=$PATH; composer global require ${PHP_COMPOSER_GLOBAL_LIBS//,/ }"
 fi
 
-IFS=',' read -ra paths <<<"${PHP_COMPOSER_PATHS}"
+IFS=',' read -ra paths <<<"${PHP_COMPOSER_PATHS:-}"
 for path in "${paths[@]}"; do
 	if [[ -d "${path}" ]]; then
 		if [ "${APP_ENV:-production}" = "production" ]; then
@@ -391,6 +391,8 @@ fi
 #https://docs.newrelic.com/docs/agents/php-agent/advanced-installation/install-php-agent-docker
 #https://stackoverflow.com/a/584926/3929620
 if is_enabled "${PHP_NEWRELIC_ENABLED:-}"; then
+	NEWRELIC_VERSION="${NEWRELIC_VERSION:-12.1.0.26}"
+
 	#https://stackoverflow.com/a/53935189/3929620
 	#https://superuser.com/a/442395
 	#https://curl.haxx.se/mail/archive-2018-02/0027.html
