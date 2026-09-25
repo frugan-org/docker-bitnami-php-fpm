@@ -384,7 +384,7 @@ fi
 #https://github.com/aptible/supercronic
 if is_enabled "${PHP_SUPERCRONIC_ENABLED:-}" && [[ -f "/etc/crontab" ]]; then
 	# shellcheck disable=SC2086
-	runuser -l daemon -c "PATH=${PATH}; /usr/local/bin/supercronic ${PHP_SUPERCRONIC_FLAGS:-} /etc/crontab" &
+	runuser -u daemon -- env PATH="${PATH}" /usr/local/bin/supercronic ${PHP_SUPERCRONIC_FLAGS:-} /etc/crontab &
 fi
 
 # === NEWRELIC CONFIGURATION ===
