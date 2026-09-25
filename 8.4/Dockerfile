@@ -2,6 +2,17 @@ FROM frugan/bitnamilegacy-php-fpm:8.4 as builder
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Debian 11 (bullseye) reached LTS EOL on 2026-08-31 and its packages are being
+# removed from the official mirrors: pin apt to the last snapshot before EOL.
+RUN . /etc/os-release \
+    && if [ "${VERSION_CODENAME:-}" = "bullseye" ]; then \
+        printf '%s\n' \
+            'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20260901T000000Z bullseye main' \
+            'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20260901T000000Z bullseye-updates main' \
+            'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20260901T000000Z bullseye-security main' \
+            > /etc/apt/sources.list; \
+    fi
+
 # redis, igbinary, msgpack, etc.
 RUN install_packages \
         autoconf \
@@ -23,6 +34,17 @@ RUN install_packages \
 FROM frugan/bitnamilegacy-php-fpm:8.4
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Debian 11 (bullseye) reached LTS EOL on 2026-08-31 and its packages are being
+# removed from the official mirrors: pin apt to the last snapshot before EOL.
+RUN . /etc/os-release \
+    && if [ "${VERSION_CODENAME:-}" = "bullseye" ]; then \
+        printf '%s\n' \
+            'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20260901T000000Z bullseye main' \
+            'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20260901T000000Z bullseye-updates main' \
+            'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20260901T000000Z bullseye-security main' \
+            > /etc/apt/sources.list; \
+    fi
 
 COPY --from=builder /opt/bitnami/php/lib/php/extensions /opt/bitnami/php/lib/php/extensions
 
