@@ -271,6 +271,16 @@ fi
 		echo 'extension = sodium' # available (not actived) in bitnami/php-fpm
 	fi
 
+	if [ -n "${PHP_OPCACHE_MEMORY_CONSUMPTION:-}" ]; then
+		echo "opcache.memory_consumption = ${PHP_OPCACHE_MEMORY_CONSUMPTION}"
+	fi
+	if [ -n "${PHP_OPCACHE_INTERNED_STRINGS_BUFFER:-}" ]; then
+		echo "opcache.interned_strings_buffer = ${PHP_OPCACHE_INTERNED_STRINGS_BUFFER}"
+	fi
+	if [ -n "${PHP_OPCACHE_MAX_ACCELERATED_FILES:-}" ]; then
+		echo "opcache.max_accelerated_files = ${PHP_OPCACHE_MAX_ACCELERATED_FILES}"
+	fi
+
 	#https://php.watch/articles/jit-in-depth
 	if [ -n "${PHP_JIT_BUFFER_SIZE:-}" ]; then
 		echo "opcache.jit_buffer_size = ${PHP_JIT_BUFFER_SIZE:-0}" # not available in bitnami/php-fpm
